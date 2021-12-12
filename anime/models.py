@@ -19,6 +19,9 @@ class Manga(models.Model):
 	rate = models.IntegerField(default=3)
 	number_of_chapters = models.IntegerField()
 
+	def __str__(self):
+		return self.name
+
 
 class Review(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
