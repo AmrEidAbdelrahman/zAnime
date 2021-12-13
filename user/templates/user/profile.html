@@ -4,10 +4,15 @@
 <div class="container bootstrap snippet">
     <div class="row">
   		<div class="col-sm-3"><!--left col-->
+	                    <form class="form" enctype='multipart/form-data' method="POST" name="One" id="form1">
 			<div class="text-center">
-				<img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+				<img src="{{ user.profile.pic.url }}" class="avatar img-circle img-thumbnail" alt="avatar" style="height : 200px ; width: 250px;">
 				<h6>Upload a different photo...</h6>
-				<input type="file" class="text-center center-block file-upload">
+					{% csrf_token %}
+					{{ p_form.pic }}
+				
+				{% comment %}
+				{% endcomment %}
 			</div></hr><br>
 
 			<ul class="list-group">
@@ -24,72 +29,58 @@
 				</div>
 			</div>   
         </div><!--/col-3-->
-    	
     	<div class="col-sm-9">
-
           	<div class="tab-content">
 	            <div class="tab-pane active" id="home">
 	                <hr>
-	                    <form class="form" action="##" method="post" id="registrationForm">
-	                    	{{ csrf_token }}
-	                    	{{ u_form }}
+	                    	{% csrf_token %}
+	                     	<div class="form-group">
+	                          
+							  	<div class="col-xs-6">
+							      	<label for="first_name"><h4> User Name</h4></label>
+							      	{{ u_form.username }}
+							  	</div>
+							</div>
 	                      <div class="form-group">
 	                          
 	                          <div class="col-xs-6">
 	                              <label for="first_name"><h4>First name</h4></label>
-	                              <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" title="enter your first name if any.">
+	                              {{ u_form.first_name }}
 	                          </div>
 	                      </div>
 	                      <div class="form-group">
 	                          
 	                          <div class="col-xs-6">
 	                            <label for="last_name"><h4>Last name</h4></label>
-	                              <input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" title="enter your last name if any.">
-	                          </div>
-	                      </div>
-	          
-	                      <div class="form-group">
-	                          
-	                          <div class="col-xs-6">
-	                              <label for="phone"><h4>Phone</h4></label>
-	                              <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any.">
-	                          </div>
-	                      </div>
-	          
-	                      <div class="form-group">
-	                          <div class="col-xs-6">
-	                             <label for="mobile"><h4>Mobile</h4></label>
-	                              <input type="text" class="form-control" name="mobile" id="mobile" placeholder="enter mobile number" title="enter your mobile number if any.">
+	                            {{ u_form.last_name }} 
 	                          </div>
 	                      </div>
 	                      <div class="form-group">
-	                          
 	                          <div class="col-xs-6">
 	                              <label for="email"><h4>Email</h4></label>
-	                              <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email.">
+	                              {{ u_form.email }}
 	                          </div>
 	                      </div>
 	                      <div class="form-group">
 	                          
 	                          <div class="col-xs-6">
+	                          	{{ p_form.Location.errors }}
 	                              <label for="email"><h4>Location</h4></label>
-	                              <input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a location">
+	                              {{ p_form.location }}
 	                          </div>
 	                      </div>
-	                      <div class="form-group">
+	                      {% comment %}
+
+						<div class="form-group">
 	                          
 	                          <div class="col-xs-6">
-	                              <label for="password"><h4>Password</h4></label>
-	                              <input type="password" class="form-control" name="password" id="password" placeholder="password" title="enter your password.">
+	                          	{{ p_form.pic_.errors }}
+	                              <label for="email"><h4>Location</h4></label>
+	                              {{ p_form.pic_ }}
 	                          </div>
-	                      </div>
-	                      <div class="form-group">
-	                          
-	                          <div class="col-xs-6">
-	                            <label for="password2"><h4>Verify</h4></label>
-	                              <input type="password" class="form-control" name="password2" id="password2" placeholder="password2" title="enter your password2.">
-	                          </div>
-	                      </div>
+	                      </div>	                      
+	                      {{ p_form }}
+	                      {% endcomment %}
 	                      <div class="form-group">
 	                           <div class="col-xs-12">
 	                                <br>
@@ -106,3 +97,12 @@
     </div><!--/row-->
                                                       
 {% endblock content %}
+{% block js %}
+	<!--<script type="text/javascript">
+		submitForms = function(){
+			document.getElementById("form1").submit();
+		    document.getElementById("form2").submit();
+		}
+	</script>
+	-->
+{% endblock js %}

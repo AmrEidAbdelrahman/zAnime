@@ -11,19 +11,35 @@ class UserLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(
         attrs={'class': 'input100'}))
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class': 'input100'}
-))
+        attrs={'class': 'input100'}))
 
 
 class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-    location = forms.CharField(max_length=20)
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    email = forms.CharField(widget=forms.EmailInput(
+        attrs={'class': 'form-control'}))
+
     class Meta():
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+
+    location = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    
     class Meta():
         model = Profile
-        fields = ['pic' , 'location']
+        fields = ['location','pic']
+        widgets = {'pic': forms.FileInput}
