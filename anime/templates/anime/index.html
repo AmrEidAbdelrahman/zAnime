@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>home</title>
-</head>
-<body>
-	<div>Home Page </div>
-	<a href="{% url 'login' %}">login</a>
-</body>
-</html>
+{% extends 'anime/base.html' %}
+{% block content %}
+
+	<div>Home page</div>
+	<a href="{% url 'login' %}">Login</a>
+	<a href="{% url 'logout' %}">logout</a>
+
+
+{% endblock content %}

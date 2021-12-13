@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    {% block css %}
+    {% endblock css %}
+	<!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css'>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'anime/css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'anime/css/main.css' %}">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    {% if title %}
+        <title>Anime - {{ title }}</title>
+    {% else %}
+        <title>Anime</title>
+    {% endif %}
+
+	<title></title>
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-custom navbar-mainbg">
+		<a class="navbar-brand navbar-logo" href="#">Navbar</a>
+		<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fas fa-bars text-white"></i>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav ml-auto">
+		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
+		        <li class="nav-item">
+		            <a class="nav-link" href="#"><i class="fas fa-tachometer-alt"></i>Manga</a>
+		        </li>
+		        <li class="nav-item">
+		            <a class="nav-link" href="#"><i class="far fa-address-book"></i>Fav</a>
+		        </li>
+		        <li class="nav-item {% if tab == 'home' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'index' %}"><i class="far fa-clone"></i>Home</a>
+		        </li>
+		        <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'profile' %}"><i class="far fa-calendar-alt"></i>Profile</a>
+		        </li>
+		        <li class="nav-item">
+		            <a class="nav-link" href="#"><i class="far fa-chart-bar"></i>Recommendations</a>
+		        </li>
+		        {% if user.is_authenticated %}
+		        <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'logout' %}"><i class="far fa-copy"></i>Logout</a>
+		        </li>
+		        {% else %}
+		        <li class="nav-item {% if request.path == '/logout/' %}active{% elif request.path == '/login/' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'login' %}"><i class="far fa-copy"></i>Login</a>
+		        </li>
+		        {% endif %}
+		    </ul>
+		</div>
+    </nav>
+    {{ request.path }}
+    {% block content %}{% endblock content %}
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
+    <script type="text/javascript" src="{% static 'anime/js/script.js' %}"></script>
+    
+    	{% block js %}{% endblock js %}
+    
+
+</body>
+</html>
