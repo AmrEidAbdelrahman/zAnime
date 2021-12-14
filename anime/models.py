@@ -16,6 +16,10 @@ class Manga(models.Model):
 	kind = models.CharField(max_length=10, choices=manga_kinds, default='Advanture')
 	pub_type = models.CharField(max_length=10, choices=manga_pub_type, default='seasonal')
 	## ------------- ##
+	## ---- TBC ---- ##
+	## ADD THE MANGA PROFILE IMAGE
+	## ------------- ##
+
 	rate = models.IntegerField(default=3)
 	number_of_chapters = models.IntegerField()
 

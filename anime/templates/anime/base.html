@@ -24,16 +24,24 @@
     {% else %}
         <title>Anime</title>
     {% endif %}
-
-	<title></title>
+    <style type="text/css">
+    	.search-box {
+    		width: 80%;
+    	}
+    </style>
 </head>
 <body>
 
 	<nav class="navbar navbar-expand-custom navbar-mainbg">
-		<a class="navbar-brand navbar-logo" href="#">Navbar</a>
-		<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<a class="navbar-brand navbar-logo text-center" href="#">Navbar</a>
+		<button class="navbar-toggler " type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 		</button>
+		<form method="GET" class="d-none d-lg-flex ">
+			<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+			<button class="btn btn-primary">Search</button>
+		</form>
+		
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav ml-auto">
 		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
@@ -64,6 +72,14 @@
 		    </ul>
 		</div>
     </nav>
+    <div class="container d-lg-none text-center">
+    	<div class="row">
+			<form method="GET">
+				<input type="search " name="search" class="search-box form-control d-inline-flex">
+				<button class="btn btn-primary">Search</button>
+			</form>
+    	</div>
+    </div>
     {{ request.path }}
     <div class="container">
     	<div class="row">
