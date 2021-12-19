@@ -8,13 +8,13 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('anime.urls')),
 
     path('login/', user_views.Login.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
     path('register/', user_views.register, name='register'),
 
-    path('profile/', user_views.profile, name='profile')
+    path('profile/', user_views.profile, name='profile'),
+    path('', include('anime.urls')),
 ]
 
 if settings.DEBUG:

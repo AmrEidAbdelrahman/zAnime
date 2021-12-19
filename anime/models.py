@@ -27,7 +27,7 @@ class Manga(models.Model):
 	## ------------- ##
 	upload_date = models.DateTimeField(auto_now_add=True)
 	## ---- TBC ---- ##
-	kind = models.CharField(max_length=10, choices=manga_kinds, default='Advanture')
+	genres = models.CharField(max_length=10, default='Advanture')
 	pub_type = models.CharField(max_length=10, choices=manga_pub_type, default='seasonal')
 	## ------------- ##
 	## ---- TBC ---- ##
@@ -40,6 +40,8 @@ class Manga(models.Model):
 	def __str__(self):
 		return self.name
 
+	def genres_as_list(self):
+		return self.genres.split(',')
 
 class Review(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -49,9 +51,13 @@ class Review(models.Model):
 
 class Chapter(models.Model):
 	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
-	season = models.IntegerField()
-	Chapter_number = models.IntegerField()
+	season = models.IntegerField(default=1)
+	chapter_number = models.IntegerField()
 	pub_date = models.DateTimeField(auto_now_add=True)
+
+
+	def __str__(self):
+		return f'{self.manga.name} Chapter {self.chapter_number}'
 
 class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)

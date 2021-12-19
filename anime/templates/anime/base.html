@@ -15,7 +15,6 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css'>
 
     <link rel="stylesheet" type="text/css" href="{% static 'anime/css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'anime/css/main.css' %}">
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -28,12 +27,14 @@
     	.search-box {
     		width: 80%;
     	}
+    	{% block style %}
+    	{% endblock style %}
     </style>
 </head>
 <body>
 
 	<nav class="navbar navbar-expand-custom navbar-mainbg">
-		<a class="navbar-brand navbar-logo text-center" href="#">Navbar</a>
+		<a class="navbar-brand navbar-logo text-center" href="#">Zanime</a>
 		<button class="navbar-toggler " type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 		</button>
@@ -45,11 +46,11 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		    <ul class="navbar-nav ml-auto">
 		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
-		        <li class="nav-item">
-		            <a class="nav-link" href="#"><i class="fas fa-tachometer-alt"></i>Manga</a>
+		        <li class="nav-item {% if tab == 'manga' %}active{% endif %}">
+		            <a class="nav-link " href="{% url 'all-manga' %}"><i class="fas fa-tachometer-alt"></i>Manga</a>
 		        </li>
-		        <li class="nav-item">
-		            <a class="nav-link" href="#"><i class="far fa-address-book"></i>Fav</a>
+		        <li class="nav-item {% if tab == 'fav' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'fav-list' %}"><i class="far fa-address-book"></i>Fav</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'home' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'index' %}"><i class="far fa-clone"></i>Home</a>
@@ -57,8 +58,8 @@
 		        <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'profile' %}"><i class="far fa-calendar-alt"></i>Profile</a>
 		        </li>
-		        <li class="nav-item">
-		            <a class="nav-link" href="#"><i class="far fa-chart-bar"></i>Recommendations</a>
+		        <li class="nav-item {% if tab == 'lists' %}active{% endif %}">
+		            <a class="nav-link" href="{% url 'mylist' %}"><i class="far fa-chart-bar"></i>My List</a>
 		        </li>
 		        {% if user.is_authenticated %}
 		        <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}">
@@ -80,8 +81,7 @@
 			</form>
     	</div>
     </div>
-    {{ request.path }}
-    <div class="container">
+    <div class="container mt-3">
     	<div class="row">
 		    {% if messages %}
 		        {% for message in messages %}
@@ -102,8 +102,9 @@
     <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <script type="text/javascript" src="{% static 'anime/js/script.js' %}"></script>
-    
+    <script type="text/javascript">
     	{% block js %}{% endblock js %}
+    </script>
     
 
 </body>
