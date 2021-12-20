@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from user.forms import UserLoginForm, UserUpdateForm, ProfileUpdateForm
+from user.forms import UserLoginForm, UserUpdateForm, ProfileUpdateForm, UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 # Create your views here.
@@ -9,7 +9,9 @@ class Login(LoginView):
 	template_name='user/login.html'
 	authentication_form=UserLoginForm
 	LOGIN_REDIRECT_URL = '/profiles/'
-	
+
+
+
 
 @login_required(login_url='/login/')
 def profile(request):
@@ -36,5 +38,15 @@ def profile(request):
 
 
 def register(request):
-	return render(request, 'user/register.html')
+	if request.method == "POST":
+		form = UserRegisterForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get("username")
+			messages.success(request, f'welcome {username}, your account created successfully')
+			return redirect("login")
 
+	else:
+		form = UserRegisterForm()
+	return render(request, 'user/register.html', {'form':form})
+	

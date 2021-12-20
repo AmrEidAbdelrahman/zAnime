@@ -43,11 +43,6 @@ class Manga(models.Model):
 	def genres_as_list(self):
 		return self.genres.split(',')
 
-class Review(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
-	given_rate = models.IntegerField(default=3)
-	content = models.TextField()
 
 class Chapter(models.Model):
 	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
@@ -59,9 +54,21 @@ class Chapter(models.Model):
 	def __str__(self):
 		return f'{self.manga.name} Chapter {self.chapter_number}'
 
-class Comment(models.Model):
+		
+class Review(models.Model):	# Have Form
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	manga = models.ForeignKey(Manga, on_delete=models.CASCADE)
+	given_rate = models.IntegerField(default=3)
+	content = models.TextField()
+
+class Comment(models.Model):	# Have Form 
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
 	content = models.TextField()
 
+
+class reply(models.Model):	# Have Form
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+	content = models.TextField()
 
