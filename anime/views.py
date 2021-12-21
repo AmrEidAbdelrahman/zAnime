@@ -1,20 +1,26 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Manga, Chapter
+from .models import Manga, Chapter, Comment
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from user.models import Favorit, List, ListItem
 from django.core.paginator import Paginator
+from .forms import ReviewForm, CommentForm
 # Create your views here.
 
 def index(request):
 	manga = Manga.objects.order_by('-rate').all()
 	manga = manga[0:15]
-	latest_chapter = Chapter.objects.order_by('-pub_date').all()
+	'''try:
+		latest_chapter = Chapter.objects.all()
+		#latest_chapter = Chapter.objects.order_by('-pub_date').all()
+	except Exception as e:
+		latest_chapter = Chapter.objects.all()
 	latest_chapter = latest_chapter[:9]
+	'''
 	context = {
 		'manga':manga,
-		'chapter': latest_chapter,
+		#'chapter': latest_chapter,
 		'tab':'home',
 		}
 	return render(request,'anime/index.html', context)
@@ -42,6 +48,9 @@ def manga(request, manga_name):
 		chapters = manga.chapter_set.all()
 	except Exception as e:
 		print(e)
+
+	form = ReviewForm()
+
 	context = {
 		'manga':manga,
 		'chapters': chapters,
@@ -50,6 +59,7 @@ def manga(request, manga_name):
 		'listitems':listitems,
 		'in_list': in_list,
 		'tab':'manga',
+		'form':form
 		}
 	return render(request, 'anime/manga.html', context)
 
@@ -232,3 +242,50 @@ def Favlist(request):
 		}
 	return render(request, 'anime/list.html', context)
 
+
+def ChapterView(request, manga_name, chapter_number):
+	manga = Manga.objects.get(name=manga_name)
+	chapter = manga.chapter_set.get(chapter_number=chapter_number)
+	print(chapter.chapter_number)
+	all_chapter = manga.chapter_set.values_list('chapter_number', flat=True)
+	try:
+		imgs = chapter.imgs[1:-1]
+		imgs = imgs.split("\', \'")
+		imgs[0] = imgs[0][1:]
+		imgs[-1] = imgs[-1][:-2]
+	except:
+		imgs=None	
+	form = CommentForm()
+
+	comments = chapter.comment_set.all()
+
+	context = {
+		'manga':manga,
+		'chapter':chapter,
+		'all_chapter':all_chapter,
+		'imgs':imgs,
+		'has_next':chapter.has_next(),
+		'has_pre':chapter.has_pre(),
+		'form':form,
+		'comments':comments,
+	}
+	return render(request, 'anime/chapter.html', context)	
+
+
+def CommentView(request):
+	if request.is_ajax and request.method == "POST":
+		try:
+			content = request.POST.get('content')
+			manga_name = request.POST.get("manga_name")
+			chapter_number = request.POST.get("chapter_number")
+			manga = Manga.objects.get(name=manga_name)
+			chapter = Chapter.objects.get(manga=manga, chapter_number=chapter_number)
+			user = request.user
+			
+			comment = Comment(user=user, chapter=chapter, content=content)
+			comment.save()
+
+			return JsonResponse({},status=200)
+		except Exception as e:
+			print(e)
+			return JsonResponse({"error":str(e)}, status=404)

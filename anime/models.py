@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 import time
 # Create your models here.
 
@@ -49,10 +50,34 @@ class Chapter(models.Model):
 	season = models.IntegerField(default=1)
 	chapter_number = models.IntegerField()
 	pub_date = models.DateTimeField(auto_now_add=True)
-
+	imgs = models.TextField(null=True)
 
 	def __str__(self):
 		return f'{self.manga.name} Chapter {self.chapter_number}'
+
+
+	def has_next(self):
+		n = self.chapter_number 
+		n = n+1
+		try:
+			next_chapter = get_object_or_404(Chapter,chapter_number=n)
+		except:
+			next_chapter = False
+		if next_chapter:
+			return True
+		return False
+
+	def has_pre(self):
+		n = self.chapter_number 
+		n = n-1
+		try:
+			next_chapter = get_object_or_404(Chapter,chapter_number=n)
+		except:
+			next_chapter = False
+		if next_chapter:
+			return True
+		return False
+		
 
 		
 class Review(models.Model):	# Have Form
@@ -64,10 +89,13 @@ class Review(models.Model):	# Have Form
 class Comment(models.Model):	# Have Form 
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+	pub_date = models.DateTimeField(auto_now_add=True)
 	content = models.TextField()
 
+	def __str__(self):
+		return f"{self.content}"
 
-class reply(models.Model):	# Have Form
+class Reply(models.Model):	# Have Form
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 	content = models.TextField()

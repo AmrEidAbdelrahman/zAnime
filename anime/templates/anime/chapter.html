@@ -1,0 +1,99 @@
+{% extends 'anime/base.html' %}
+
+{% block style %}
+
+	.chapter_header {
+		height: 400px;
+	}
+
+{% endblock style %}
+
+{% block content %}
+<div class="container chapter_header">
+	<h1>{{ manga.name }}</h1>
+</div>
+<div class="chapter_body container">
+	<div class="dropdown d-inline">
+	  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+	    Select Chapter
+	  </button>
+	  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+	    {% for n in all_chapter %}
+
+	    <li><a class="dropdown-item" href="{% url 'chapter' manga.name n %}">Chapter {{n}}</a></li>
+	    {% endfor %}
+	    <li><a class="dropdown-item" href="#">Another action</a></li>
+	    <li><a class="dropdown-item" href="#">Something else here</a></li>
+	  </ul>
+	</div>
+
+	<div class="pre-next d-inline float-end mr-5">
+		{% if has_pre %}
+		<a href='{% url "chapter" manga.name chapter.chapter_number|add:"-1" %}' class="btn btn-primary mr-2 w-75 d-inline">Previouse</a>
+		{% endif %}
+		{% if has_next %}
+		<a href="{% url 'chapter' manga.name chapter.chapter_number|add:'1' %}" class="btn btn-primary w-75 d-inline">Next</a>
+		{% endif %}
+	</div>
+</div>
+<div class="container text-centers">
+	{% for i in imgs %}
+		<img src="{{i}}" style="width:80%">
+	{% endfor %}
+</div>
+<div class="container">
+	<h1>Comments</h1>
+	<form id="comment" method="POST" >
+		{% csrf_token %}
+		<input type="hidden" name="manga_name" value="{{ manga.name }}">
+		<input type="hidden" name="chapter_number" value="{{ chapter.chapter_number }}">
+		{{ form }}
+		<button type="submit" class="btn btn-primary" >Comment</button>
+	</form>
+</div>
+<div class="container" id="comments_section">
+	<h1>Comments</h1>
+	{% for comment in comments %}
+		<div class="card">
+		  <div class="card-header">
+		    {{comment.user.username}}
+		  </div>
+		  <div class="card-body">
+		    <p class="card-text">{{comment.content}}</p>
+		    <a href="#" class="btn btn-primary">Go somewhere</a>
+		  </div>
+		</div>
+	{% endfor %}
+</div>
+{% endblock content%}
+
+{% block js %}
+</script>
+<script type="text/javascript">
+	$("#select_chapter").change(function(e){
+		val = $(this).find(":selected").val().slice(7,).trim()
+		var url_mask = "{% url 'chapter' manga.name '2658935404' %}".replace('2658935404',val.toString());
+		window.location.href = url_mask;
+	})
+
+	$("#comment").submit(function(e){
+		e.preventDefault();
+		var serializedData = $(this).serialize();
+		$.ajax({
+	        url: "{% url 'comment' %}",
+	        type: 'POST',
+	        data: serializedData,
+	        success: function(response) {
+	        	$("textarea#id_content").val("");
+	        	console.log("dsadas");
+	        },
+            error: function (response) {
+                // alert the error if any error occured
+                alert(response["responseJSON"]["error"]);
+            }
+
+    	})
+
+	})
+
+{% endblock js %}
