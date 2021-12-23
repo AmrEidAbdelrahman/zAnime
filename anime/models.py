@@ -89,7 +89,7 @@ class Review(models.Model):	# Have Form
 class Comment(models.Model):	# Have Form 
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-	pub_date = models.DateTimeField(auto_now_add=True)
+	pub_date = models.DateTimeField(auto_now_add=True, null=True)
 	content = models.TextField()
 
 	def __str__(self):
@@ -99,4 +99,8 @@ class Reply(models.Model):	# Have Form
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 	content = models.TextField()
+
+
+	def __str__(self):
+		return f"{self.user.username} replied {self.comment.user.username}'s comment"
 

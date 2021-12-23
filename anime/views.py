@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Manga, Chapter, Comment
+from .models import Manga, Chapter, Comment, Reply, Review
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from user.models import Favorit, List, ListItem
@@ -257,7 +257,7 @@ def ChapterView(request, manga_name, chapter_number):
 		imgs=None	
 	form = CommentForm()
 
-	comments = chapter.comment_set.all()
+	comments = chapter.comment_set.order_by("-pub_date").all()
 
 	context = {
 		'manga':manga,
@@ -285,7 +285,56 @@ def CommentView(request):
 			comment = Comment(user=user, chapter=chapter, content=content)
 			comment.save()
 
-			return JsonResponse({},status=200)
+			data = {
+				'username':user.username,
+			}
+
+			return JsonResponse(data, status=200)
 		except Exception as e:
 			print(e)
 			return JsonResponse({"error":str(e)}, status=404)
+
+
+def ReplyView(request):
+	if request.is_ajax and request.method == "POST":
+		try:
+			content = request.POST.get('content')
+			comment_id = request.POST.get("comment_id")
+			user = request.user
+			comment = Comment.objects.get(pk=comment_id)
+			
+			reply = Reply(user=user, comment=comment, content=content)
+			print(reply)
+			reply.save()
+
+			data = {
+				'username':user.username,
+			}
+
+			return JsonResponse(data, status=200)
+		except Exception as e:
+			print(e)
+			return JsonResponse({"error":str(e)}, status=404)
+
+def ReviewView(request):
+	if request.is_ajax and request.method == "POST":
+		try:
+			content = request.POST.get('content')
+			rate = request.POST.get("rate")
+			manga_id = request.POST.get("manga_id")
+			user = request.user
+			manga = Manga.objects.get(pk=manga_id)
+			
+
+			review = Review(user=user, manga=manga, content=content, given_rate=rate)
+			print(review)
+			review.save()
+
+			data = {
+
+			}
+			return JsonResponse(data, status=200)
+		except Exception as e:
+			print(e)
+			return JsonResponse({"error":str(e)}, status=404)
+
