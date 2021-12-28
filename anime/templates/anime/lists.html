@@ -51,9 +51,16 @@
 		<div class="row">
 			<a href="{% url 'list-details' li.name %}" class="mb-2">	
 			  <li class="list-group-item d-flex  hover">
-				<div id="name_{{ li.id }}" class="d-block  fs-3 col-9">{{ li.name }}</div>
-			    <div class="col">
+				<div id="name_{{ li.id }}" class="d-block  fs-3 col-8">{{ li.name }}</div>
+			    <div class="col-2">
 				    <button  class="btn btn-info d-inline col edit_list" id="{{li.id}}">Edit</button>
+			    </div>
+			    <div class="col-2">
+			    	<form class="delete_list" method="POST">
+			    		{% csrf_token %}
+			    		<input type="hidden" name="list_id" value="{{li.id}}">
+				    	<button  class="btn btn-danger d-inline col delete_list" >Delete</button>
+			    	</form>
 			    </div>
 			  </li>
 			  <span></span>
@@ -147,7 +154,33 @@ $("#new_option").submit(function (e) {
             alert(response);
         }
     })
-	})
+})
+	
+$(".delete_list").submit(function (e) {
+	// preventing from page reload and default actions
+	e.preventDefault();
+	console.log("FORM SUBMISSION STARTED!");
+	// serialize the data for sending the form data.
+	var serializedData = $(this).serialize();
+
+	// make POST ajax call
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'delete-list' %}",
+        data: serializedData,
+        dataType: "json",
+        success: function (response) {
+            // on successfull creating object
+            $(this).parent().parent().parent().remove();
+            console.log($(this).parent());
+            
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert(response);
+        }
+    })
+})
 
 
 {% endblock js %}

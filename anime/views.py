@@ -249,8 +249,21 @@ def edit_list(request,list_id):
 		except Exception as e:
 			print(e)
 			return JsonResponse({"new_list":"new_list"}, status=404)
-	return JsonResponse({"new_list":"why!!!"}, status=404)
 
+@login_required(login_url='/login/')
+def delete_list(request):
+	if request.is_ajax and request.method == "POST":
+		user = request.user
+		list_id = request.POST.get('list_id')
+		try:
+			list_ = List.objects.get(pk=list_id, user=user)
+			list_.delete()
+			print("WE ARE  HERE !!!")
+			return JsonResponse({"status":"deleted"}, status=200)
+		except Exception as e:
+			print(e)
+			return JsonResponse({"new_list":"new_list"}, status=404)
+	
 @login_required(login_url='/login/')
 def Favlist(request):
 	user = request.user
