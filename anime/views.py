@@ -6,7 +6,12 @@ from django.contrib.auth.models import User
 from user.models import Favorit, List, ListItem
 from django.core.paginator import Paginator
 from .forms import ReviewForm, CommentForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+
+
+
 
 def index(request):
 	manga = Manga.objects.order_by('-rate').all()
@@ -27,16 +32,17 @@ def index(request):
 
 def manga(request, manga_name):
 	manga = get_object_or_404(Manga, name=manga_name)
-	#manga = Manga.objects.get(name=manga_name)
 	user = request.user
 	fav_manga = user.favorit_set.values_list('manga',flat=True)
 	lists = user.list_set.all()
 	in_fav = True if manga.id in fav_manga else False
 
-	lista = user.list_set.all()[0]
-	manga_in_the_list = lista.listitem_set.values_list('manga',flat=True) 
-	in_list = True if manga.id in manga_in_the_list else False
-
+	lista = user.list_set.all().first()
+	if lista:
+		manga_in_the_list = lista.listitem_set.values_list('manga',flat=True) 
+		in_list = True if manga.id in manga_in_the_list else False
+	else:
+		in_list = False
 	listitems = []
 	listas = user.list_set.all()
 	for l in listas:
@@ -72,24 +78,17 @@ class MangaListView(ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		print("WE ARE HERE !")
+		print(self.request.GET.get("list_name"))
+		name = self.request.GET.get("search") if self.request.GET.get("search") else ""
+		context['manga_list'] = Manga.objects.filter(name__icontains=name)
 		context['tab'] = 'manga'
 		return context
 
 
 
 
-
-
-'''
-class MangaListView(ListView):
-	model = Manga
-	template_name = 'anime/index.html'
-	context_object_name = 'manga'
-	paginate_by = 9
-
-'''
-
-
+@login_required(login_url='/login/')
 def add_to_fav(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -109,6 +108,7 @@ def add_to_fav(request):
 			print("crap2")
 			return JsonResponse({"error":"str(e)"}, status=404)
 
+@login_required(login_url='/login/')
 def remove_from_fav(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -128,6 +128,7 @@ def remove_from_fav(request):
 			print("crap2")
 			return JsonResponse({"error":str(e)}, status=404)
 
+@login_required(login_url='/login/')
 def add_to_list(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -153,6 +154,8 @@ def add_to_list(request):
 			return JsonResponse({"error":str(e)}, status=404)
 '''
 '''
+
+@login_required(login_url='/login/')
 def remove_from_list(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -174,6 +177,7 @@ def remove_from_list(request):
 			print("crap2")
 			return JsonResponse({"error":str(e)}, status=404)
 
+@login_required(login_url='/login/')
 def add_new_list(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -198,6 +202,7 @@ def add_new_list(request):
 			return JsonResponse({"error":str(e)}, status=404)
 
 
+@login_required(login_url='/login/')
 def Lists(request):
 	user = request.user
 	
@@ -213,6 +218,7 @@ def Lists(request):
 		}
 	return render(request, 'anime/lists.html', context)
 
+@login_required(login_url='/login/')
 def ListDetails(request, list_name):
 	user = request.user
 	lista = List.objects.get(user=user, name=list_name)
@@ -222,12 +228,24 @@ def ListDetails(request, list_name):
 	page_number = request.GET.get('page')
 	page_obj = paginator.get_page(page_number)
 	context = {
-	
+		'list_name':list_name,
 		'tab':'lists',
 		'page_obj':page_obj,
 		}
 	return render(request, 'anime/list.html', context)
 
+def edit_list(request,list_id):
+	user = request.user
+	if request.method == "POST":
+		name = request.POST.get('name')
+		try:
+			list_ = List.objects.update(name=name, pk=list_id, user=user)
+			return JsonResponse({"new_list":"edited"}, status=200)
+		except Exception as e:
+			print(e)
+			return JsonResponse({"new_list":"new_list"}, status=404)
+
+@login_required(login_url='/login/')
 def Favlist(request):
 	user = request.user
 	fav_items = user.favorit_set.all()
@@ -272,6 +290,7 @@ def ChapterView(request, manga_name, chapter_number):
 	return render(request, 'anime/chapter.html', context)	
 
 
+@login_required(login_url='/login/')
 def CommentView(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -295,6 +314,7 @@ def CommentView(request):
 			return JsonResponse({"error":str(e)}, status=404)
 
 
+@login_required(login_url='/login/')
 def ReplyView(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -316,6 +336,7 @@ def ReplyView(request):
 			print(e)
 			return JsonResponse({"error":str(e)}, status=404)
 
+@login_required(login_url='/login/')
 def ReviewView(request):
 	if request.is_ajax and request.method == "POST":
 		try:
@@ -338,3 +359,22 @@ def ReviewView(request):
 			print(e)
 			return JsonResponse({"error":str(e)}, status=404)
 
+
+'''
+def notification_test_page(request):
+
+    # Django Channels Notifications Test
+    current_user = request.user
+    channel_layer = get_channel_layer()
+    data = "notification"+ "...." + str(datetime.now())
+    # Trigger message sent to group
+    async_to_sync(channel_layer.group_send)(
+        str(current_user.pk),  # Channel Name, Should always be string
+        {
+            "type": "notify",   # Custom Function written in the consumers.py
+            "text": data,
+        },
+    )  
+    return render(request, 'django_notifications_app/notifications_test_page.html')
+
+'''

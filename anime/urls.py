@@ -17,6 +17,7 @@ urlpatterns = [
     path('add_to_fav/', add_to_fav, name='add-to-fav'),
     path('remove_from_fav/', remove_from_fav, name='remove-from-fav'),
     path('add_new_list/', add_new_list, name='add-new-list'),
+    path('edit_list/', edit_list, name='edit-list'),
 
     path('add_to_list/', add_to_list, name='add-to-list'),
     path('remove_from_list/', remove_from_list, name='remove-from-list'),

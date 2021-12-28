@@ -6,3 +6,13 @@ class UserConfig(AppConfig):
 
     def ready(self):
         import user.signals
+
+
+'''
+class ChapterConfig(AppConfig):
+    name = 'chapter'
+    verbose_name = 'Chapter'
+
+    def ready(self):
+        import chapter.signals
+'''

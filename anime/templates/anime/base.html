@@ -28,23 +28,72 @@
     	.search-box {
     		width: 80%;
     	}
+
+    	.notification-body {
+    		display: none;
+    		position: absolute;
+    		left: 30% ;
+    		top: 4em;
+    		width: 30%;
+    		z-index: 1000;
+    		background-color: #EEE;
+    		border-radius: 2%;
+    		padding: 5px;
+    		/*height: 200px;*/
+    	}
+
     	{% block style %}
     	{% endblock style %}
     </style>
 </head>
 <body>
+	
+	<div id="notification-body" class="notification-body" >
+		<div class="notification row">
+			<div class="col-2">
+				<img src="">
+			</div>
+			<div class="col">
+				<span>notification header</span>
+				<div>notification detials</div>
+				<span>time</span>
+			</div>
+		</div>
+		<div class="notification">
+			...
+		</div>
+		<div class="notification">
+			...
+		</div>
+		<div class="notification">
+			...
+		</div>
+		<div class="notification">
+			...
+		</div>
+		<div class="notification">
+			...
+		</div>
+	</div>
 
 	<nav class="navbar navbar-expand-custom navbar-mainbg">
 		<a class="navbar-brand navbar-logo text-center" href="#">Zanime</a>
 		<button class="navbar-toggler " type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 		</button>
-		<form method="GET" class="d-none d-lg-flex ">
-			<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+		<form method="GET" class="d-none d-lg-flex" action="{% url 'all-manga' %}">
+			<input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 			<button class="btn btn-primary">Search</button>
 		</form>
-		
+
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="nav-item" onclick="display_notification()">
+	            <a class="nav-link ml-5">
+	            	<span style="font-size: 1.3em; color:white;">
+					  	<i class="far fa-bell 7x"></i>
+					</span>
+	            </a>
+	        </div>
 		    <ul class="navbar-nav ml-auto">
 		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
 		        <li class="nav-item {% if tab == 'manga' %}active{% endif %}">
@@ -62,6 +111,7 @@
 		        <li class="nav-item {% if tab == 'lists' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'mylist' %}"><i class="far fa-chart-bar"></i>My List</a>
 		        </li>
+		        
 		        {% if user.is_authenticated %}
 		        <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'logout' %}"><i class="far fa-copy"></i>Logout</a>
@@ -76,9 +126,9 @@
     </nav>
     <div class="container d-lg-none text-center">
     	<div class="row">
-			<form method="GET">
-				<input type="search " name="search" class="search-box form-control d-inline-flex">
-				<button class="btn btn-primary">Search</button>
+			<form method="GET" >
+				<input type="text" class="search-box form-control d-inline-flex" name="search">
+				<input type="submit" class="btn btn-primary" value="">
 			</form>
     	</div>
     </div>
@@ -104,9 +154,73 @@
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <script type="text/javascript" src="{% static 'anime/js/script.js' %}"></script>
     <script type="text/javascript">
+    	function display_notification(){
+    		console.log()
+    		if ($("#notification-body").css("display") == "block"){
+    			$("#notification-body").css("display", "none");
+    		}
+    		else {
+    			$("#notification-body").css("display","block");
+    			$.ajax({
+    				typr: 'GET',
+    				url: "{% url 'notification' %}",
+    				success: function(response){
+    					console.log("GET NOTIFICATIONS DONE!");
+    					console.log(response);
+    					data = response["data"];
+    					res = "";
+    					for(var i=0 ; i < 6 ; i++ ){
+    						res += "<div class='notification row mb-2'><div class='col-2'><img src=''></div><div class='col'><span>notification header</span><div>notification detials</div><span class='mt-5'>time</span></div></div>";
+    						console.log(i)
+    					}
+    					$("#notification-body").empty();
+    					$("#notification-body").append(res);
+    				},
+    				error: function(response){
+    					console.log("ERROR");
+    				},
+    			});
+    		}
+    	}
     	{% block js %}{% endblock js %}
     </script>
     
+<!-- Notification Web Socket -->
+<script>
+    var loc = window.location
+    var wsStart = "ws://"
+    if (loc.protocol == "https:"){
+        wsStart = "wss://"
+    }
+    var webSocketEndpoint =  wsStart + loc.host + '/notifications/'  // ws : wss   // Websocket URL, Same on as mentioned in the routing.py
+
+
+    var socket = new WebSocket(webSocketEndpoint) // Creating a new Web Socket Connection
+
+    // Socket On receive message Functionality
+    socket.onmessage = function(e){
+        console.log('message', e)
+        $("body").append("<h3>"+e.data+"</h3>")
+        // Can write any functionality based on your requirement
+
+    }
+
+    // Socket Connet Functionality
+    socket.onopen = function(e){
+        console.log('open', e)
+    }
+
+    // Socket Error Functionality
+    socket.onerror = function(e){
+        console.log('error', e)
+    }
+
+    // Socket close Functionality
+    socket.onclose = function(e){
+        console.log('closed', e)
+    }
+</script>
+
 
 </body>
 </html>

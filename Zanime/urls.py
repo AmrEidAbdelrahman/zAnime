@@ -13,6 +13,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
     path('register/', user_views.register, name='register'),
 
+    path('notification/', user_views.NotificationView, name='notification'),
+
     path('profile/', user_views.profile, name='profile'),
     path('', include('anime.urls')),
 ]

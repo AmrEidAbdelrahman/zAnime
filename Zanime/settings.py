@@ -59,10 +59,27 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Zanime.wsgi.application'
-
+# Django Channels
+#ASGI_APPLICATION = "Zanime.routing.application"    # your_project_name.routing.application
+# End Django Channels
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+# Django Channels
+# Adding Django Channel Layers
+'''
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],   # Change localhost to the ip in which you have redis server running on.
+        },
+    },
+}
+'''
+
+# End Django Channels
 
 DATABASES = {
     'default': {

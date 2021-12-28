@@ -1,8 +1,14 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib import messages
 from user.forms import UserLoginForm, UserUpdateForm, ProfileUpdateForm, UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from .models import Notification
+
+
+
+import json
 # Create your views here.
 
 class Login(LoginView):
@@ -49,4 +55,16 @@ def register(request):
 	else:
 		form = UserRegisterForm()
 	return render(request, 'user/register.html', {'form':form})
+
+def NotificationView(request):
+	if request.method == "GET":
+		try:
+			user = request.user
+			notifications = user.notification_set.all().order_by("-arr_date").values("message")
+			if len(notifications) > 2:
+				notifications = notifications[0:2]
+			return JsonResponse(data={'data': list(notifications)})
+		except Exception as e:
+			print(e)
+			return JsonResponse({"error":str(e)}, status=404)
 	

@@ -20,44 +20,129 @@
 		background-color:#EEE;
 	}
 
+	#new_option_form {
+		width: 100%;
+		height: 100%;
+		z-index :1000;
+		margin-left: 20%;
+	}
+
+	#new_option,#new_option_input {
+		width: 50%;
+		margin-top: 0%;
+		left: 40%;
+		z-index: 1001;
+	}
 {% endblock style %}
 
 {% block content %}
+	<div id="new_option_form" class="d-none position-absolute "></div>
+	<form id="new_option" name="add_new_list" class="d-none  position-absolute top-50 start-25">
+		{% csrf_token %}
+		<div class="d-inline">
+			<input id="new_option_input" type="text" name="new_option" class="form-control d-inline">
+			<button type="submit" class="btn btn-info d-inline">edit</button>
+		</div>
+	</form>
 	<div class="container">
 		<h2 class="mt-3">Chapters</h2>
 		<ul class="list-group">
 		{% for li in page_obj %}
+		<div class="row">
 			<a href="{% url 'list-details' li.name %}" class="mb-2">	
 			  <li class="list-group-item d-flex  hover">
-			    <div>
-				    <div class="d-block  fs-3">{{ li.name }}</div>
+				<div class="d-block  fs-3 col-9">{{ li.name }}</div>
+			    <div class="col">
+				    <button  class="btn btn-info d-inline col edit_list" id="{{li.id}}">Edit</button>
 			    </div>
 			  </li>
 			  <span></span>
 			</a>
-			{% endfor %}
+		</div>
+		{% endfor %}
 		</ul>
-	</div>
-
-	<div style="text-align: center;margin: 20px;" class="mb-10">
-		{% if page_obj.has_previous %}
-			<a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-			<a class="btn btn-outline-info" href="?page=1">First</a>
-		{% endif %}
-
-		{% for num in page_obj.paginator.page_range %}
-
-			{% if page_obj.number == num %}
-				<a class="btn btn-info" href="?page={{ num }}">{{ num }}</a>
-			{% elif page_obj.number > num|add:'-3' and page_obj.number < num|add:'3' %}
-				<a class="btn btn-outline-info" href="?page={{ num }}">{{num}}</a>
+		<div style="text-align: center;margin: 20px;" class="mb-10">
+			{% if page_obj.has_previous %}
+				<a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+				<a class="btn btn-outline-info" href="?page=1">First</a>
 			{% endif %}
 
-		{% endfor %}
+			{% for num in page_obj.paginator.page_range %}
 
-		{% if page_obj.has_next %}
-			<a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-			<a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">Next</a>
-		{% endif %}
+				{% if page_obj.number == num %}
+					<a class="btn btn-info" href="?page={{ num }}">{{ num }}</a>
+				{% elif page_obj.number > num|add:'-3' and page_obj.number < num|add:'3' %}
+					<a class="btn btn-outline-info" href="?page={{ num }}">{{num}}</a>
+				{% endif %}
+
+			{% endfor %}
+
+			{% if page_obj.has_next %}
+				<a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+				<a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">Next</a>
+			{% endif %}
+		</div>
 	</div>
+
 {% endblock content%}
+
+{% block js %}
+
+</script>
+
+<script type="text/javascript">
+
+let list_id = null;
+
+
+$('.edit_list').click(function(e){
+	e.preventDefault();
+	list_id = $(this).attr("id");
+	console.log(list_id);
+	$('#new_option').removeClass('d-none');
+	$('#new_option_form').removeClass('d-none');
+    $('.container').css('opacity','0.3');
+    //$('#lista option').eq(0).prop('selected', true);
+});
+
+$('#new_option_form').click(function(e){
+	e.preventDefault();
+	console.log("clicked");
+	$('#new_option').addClass('d-none');
+	$('#new_option_form').addClass('d-none');
+    $('.container').css('opacity','1');
+    //$('#lista option').eq(0).prop('selected', true);
+});
+
+
+$("#new_option").submit(function (e) {
+	// preventing from page reload and default actions
+	console.log("primary");
+	e.preventDefault();
+	// serialize the data for sending the form data.
+	list_name = $(this).children("#new_option_input").val()
+	var serializedData = $(this).serialize();
+
+	t = $(this);
+	btn = t.children("button");
+
+	// make POST ajax call
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'edit-list' dasdasdasdas %}".replace("dasdasdasdas",list_id),
+        data: serializedData,
+        dataType: "json",
+        success: function (response) {
+            // on successfull creating object
+            console.log(response);
+            
+        },
+        error: function (response) {
+            // alert the error if any error occured
+            alert(response);
+        }
+    })
+	})
+
+
+{% endblock js %}
