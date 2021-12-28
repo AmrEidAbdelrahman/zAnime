@@ -234,16 +234,22 @@ def ListDetails(request, list_name):
 		}
 	return render(request, 'anime/list.html', context)
 
+@login_required(login_url='/login/')
 def edit_list(request,list_id):
-	user = request.user
-	if request.method == "POST":
+	if request.is_ajax and request.method == "POST":
+		user = request.user
 		name = request.POST.get('name')
 		try:
-			list_ = List.objects.update(name=name, pk=list_id, user=user)
+			list_ = List.objects.get(pk=list_id)
+			list_.name = name
+			list_.save()
+			print("WE ARE  HERE !!!")
+			print(list_.name)
 			return JsonResponse({"new_list":"edited"}, status=200)
 		except Exception as e:
 			print(e)
 			return JsonResponse({"new_list":"new_list"}, status=404)
+	return JsonResponse({"new_list":"why!!!"}, status=404)
 
 @login_required(login_url='/login/')
 def Favlist(request):

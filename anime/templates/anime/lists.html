@@ -40,7 +40,7 @@
 	<form id="new_option" name="add_new_list" class="d-none  position-absolute top-50 start-25">
 		{% csrf_token %}
 		<div class="d-inline">
-			<input id="new_option_input" type="text" name="new_option" class="form-control d-inline">
+			<input id="new_option_input" type="text" name="name" class="form-control d-inline">
 			<button type="submit" class="btn btn-info d-inline">edit</button>
 		</div>
 	</form>
@@ -51,7 +51,7 @@
 		<div class="row">
 			<a href="{% url 'list-details' li.name %}" class="mb-2">	
 			  <li class="list-group-item d-flex  hover">
-				<div class="d-block  fs-3 col-9">{{ li.name }}</div>
+				<div id="name_{{ li.id }}" class="d-block  fs-3 col-9">{{ li.name }}</div>
 			    <div class="col">
 				    <button  class="btn btn-info d-inline col edit_list" id="{{li.id}}">Edit</button>
 			    </div>
@@ -93,12 +93,15 @@
 <script type="text/javascript">
 
 let list_id = null;
-
+let name_div = null;
+let new_name = null;
 
 $('.edit_list').click(function(e){
 	e.preventDefault();
 	list_id = $(this).attr("id");
-	console.log(list_id);
+	list_name = $("#name_"+list_id).text();
+	console.log(list_name + "dasdas");
+	$("#new_option_input").val(list_name);
 	$('#new_option').removeClass('d-none');
 	$('#new_option_form').removeClass('d-none');
     $('.container').css('opacity','0.3');
@@ -107,7 +110,7 @@ $('.edit_list').click(function(e){
 
 $('#new_option_form').click(function(e){
 	e.preventDefault();
-	console.log("clicked");
+	$("#new_option_input").attr("value", "");
 	$('#new_option').addClass('d-none');
 	$('#new_option_form').addClass('d-none');
     $('.container').css('opacity','1');
@@ -120,7 +123,8 @@ $("#new_option").submit(function (e) {
 	console.log("primary");
 	e.preventDefault();
 	// serialize the data for sending the form data.
-	list_name = $(this).children("#new_option_input").val()
+	new_name = $("#new_option_input").val();
+	console.log(new_name);
 	var serializedData = $(this).serialize();
 
 	t = $(this);
@@ -129,12 +133,13 @@ $("#new_option").submit(function (e) {
 	// make POST ajax call
     $.ajax({
         type: 'POST',
-        url: "{% url 'edit-list' dasdasdasdas %}".replace("dasdasdasdas",list_id),
+        url: "{% url 'edit-list' 15847896355 %}".replace("15847896355",list_id),
         data: serializedData,
         dataType: "json",
         success: function (response) {
             // on successfull creating object
-            console.log(response);
+            $("#name_"+list_id).text(new_name);
+            console.log("7lo awiii");
             
         },
         error: function (response) {
