@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Profile, Notification, List
 from anime.models import Chapter
 
+from anime.consumers import WSConsumer
 
 @receiver(post_save,sender=User)
 def create_profile(sender, instance, created, **kwargs):

@@ -1,9 +1,10 @@
 from django.urls import path, include
 from .views import index, manga, MangaListView, add_to_fav, remove_from_fav, add_to_list, remove_from_list, add_new_list, Lists, \
-ListDetails, Favlist, ChapterView, CommentView, ReplyView, ReviewView, edit_list, delete_list
+ListDetails, Favlist, ChapterView, CommentView, ReplyView, ReviewView, edit_list, delete_list, testview
 
 urlpatterns = [
     path('', index),
+    path('test/', testview),
     path('index/', index, name='index'),
     path('manga/', MangaListView.as_view(), name='all-manga'),
     path('lists/', Lists, name='mylist'),

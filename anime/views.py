@@ -10,8 +10,27 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
+
+
+def testview(request, room_name='event'):
+	print("##########TESTVIEW###########")
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		'event_amr',
+		{
+			'type': 'receive',
+			'message': 'message_dsadsa'
+		}
+	)
+	print("########AFTER TEST VIEW#########")
+	context = {
+		'a':'a',
+	}
+	return render(request, 'anime/test.html', context)
 
 def index(request):
 	manga = Manga.objects.order_by('-rate').all()
