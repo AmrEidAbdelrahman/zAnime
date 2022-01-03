@@ -29,7 +29,8 @@ class WSConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data=None, bytes_data=None):
 		print(" MESSAGE RECEIVED")
 		# Receive message from room group
-		message = "eventdsadasds"
+		text_data_json = text_data
+		message = text_data_json['message']
 		# Send message to WebSocket
 		await self.send(text_data=json.dumps({
 		    'message': message

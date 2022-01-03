@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from .models import Profile, Notification, List
 from anime.models import Chapter
 
-from anime.consumers import WSConsumer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 @receiver(post_save,sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -33,5 +34,16 @@ def send_notification(sender, instance, created, **kwargs):
 			#for i in notifications:
 			#	i.save()
 			Notification.objects.bulk_create(notifications, ignore_conflicts=True)
+
+		print("##########TESTVIEW###########")
+		channel_layer = get_channel_layer()
+		async_to_sync(channel_layer.group_send)(
+		'event_amr',
+		{
+			'type': 'receive',
+			'message': 'THIS MESSAGE FROM NOTIFICATIONS SIGNAL'
+		}
+		)
+		print("########AFTER TEST VIEW#########")
 		print("THIS FUNCTION WORKS GOOD")
 		

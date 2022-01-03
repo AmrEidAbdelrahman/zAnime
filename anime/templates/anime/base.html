@@ -42,6 +42,21 @@
     		/*height: 200px;*/
     	}
 
+    	.notification-icon {
+    		position: relative;
+    		left: 40px;
+    	}
+
+    	.notification-number {
+    		color: #fff;
+    		background-color: #000;
+    		border-radius: 50%;
+    		padding: 0 5px 0 5px;
+    		position: relative;
+    		left: 32px;
+    		top: -12px;
+    	}
+
     	{% block style %}
     	{% endblock style %}
     </style>
@@ -87,12 +102,11 @@
 		</form>
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<div class="nav-item" onclick="display_notification()">
-	            <a class="nav-link ml-5">
-	            	<span style="font-size: 1.3em; color:white;">
-					  	<i class="far fa-bell 7x"></i>
-					</span>
-	            </a>
+            <div class="notification-icon" onclick="display_notification()">
+            	<span id="notifiaction_number" class="fs-6 notification-number d-inline">1</span>
+            	<span style="font-size: 1.3em; color:white;">
+				  	<i class="far fa-bell 7x"></i>
+				</span>
 	        </div>
 		    <ul class="navbar-nav ml-auto">
 		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
@@ -160,7 +174,9 @@
     			$("#notification-body").css("display", "none");
     		}
     		else {
-    			$("#notification-body").css("display","block");
+    			$("#notifiaction_number").css("visiblity","hidden");
+    			$("#notifiaction_number").text("0");
+    			$("#notification-body").css("display","inline");
     			$.ajax({
     				typr: 'GET',
     				url: "{% url 'notification' %}",
@@ -192,7 +208,11 @@
     // Socket On receive message Functionality
     socket.onmessage = function(event){
     	var data = JSON.parse(event.data)
-        console.log('message' + data['message'])
+        console.log('message' + data['message']);
+        $("#notifiaction_number").css("display","inline")
+        prev = parseInt($("#notifiaction_number").text());
+        console.log(prev);
+        $("#notifiaction_number").text(prev+1);
         //$("body").append("<h3>"+e.data+"</h3>")
         // Can write any functionality based on your requirement
 
