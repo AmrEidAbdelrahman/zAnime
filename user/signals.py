@@ -2,8 +2,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
+from chapter.models import Chapter
 from .models import Profile, Notification, List
-from anime.models import Chapter
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync

@@ -1,7 +1,8 @@
 from django.db import models
 from  django.contrib.auth.models import User
-from anime.models import Manga
 # Create your models here.
+from manga.models import Manga
+
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)

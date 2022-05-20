@@ -1,8 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Manga, Chapter, Comment, Reply, Review
 from django.views.generic import ListView
 from django.contrib.auth.models import User
+
+from chapter.models import Chapter
+from comments.models import Comment
+from manga.models import Manga
+from reviews.models import Review
 from user.models import Favorit, List, ListItem
 from django.core.paginator import Paginator
 from .forms import ReviewForm, CommentForm

@@ -1,6 +1,7 @@
 from django import forms
-from .models import Review, Comment, Reply
 
+from comments.models import Comment
+from reviews.models import Review
 
 
 class ReviewForm(forms.ModelForm):
