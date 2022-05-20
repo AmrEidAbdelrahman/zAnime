@@ -7,6 +7,8 @@ from user.models import Favorit, List, ListItem
 from django.core.paginator import Paginator
 from .forms import ReviewForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from rest_framework.viewsets import ModelViewSet
+
 # Create your views here.
 
 
@@ -32,22 +34,23 @@ def testview(request, room_name='event'):
 	}
 	return render(request, 'anime/test.html', context)
 
-def index(request):
-	manga = Manga.objects.order_by('-rate').all()
-	manga = manga[0:15]
-	'''try:
-		latest_chapter = Chapter.objects.all()
-		#latest_chapter = Chapter.objects.order_by('-pub_date').all()
-	except Exception as e:
-		latest_chapter = Chapter.objects.all()
-	latest_chapter = latest_chapter[:9]
-	'''
-	context = {
-		'manga':manga,
-		#'chapter': latest_chapter,
-		'tab':'home',
+
+class IndexView(ModelViewSet):
+	model = Manga
+	paginated_by = 10
+	queryset = Manga.objects.all()
+
+	def list(self, request, *args, **kwargs):
+		print("#######LIST#######")
+		qs = self.get_queryset()
+		context = {
+			'manga': qs,
+			'tab': 'home',
 		}
-	return render(request,'anime/index.html', context)
+		return render(request, 'anime/index.html', context)
+
+
+
 
 def manga(request, manga_name):
 	manga = get_object_or_404(Manga, name=manga_name)
