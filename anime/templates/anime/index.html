@@ -29,12 +29,12 @@
 			<div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
 			  	<img src="/media/poster.webp" class="card-img-top rounded" alt="...">
 			 	<div class="">
-			    	<a href="{% url 'manga' m.name %}"><p  class="mt-2">{{ m.name }}</p></a>
+			    	<a href="{% url 'manga' m.title %}"><p  class="mt-2">{{ m.title }}</p></a>
 			    	<!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
 			  	</div>
 			</div>
 			{% endfor %}		
-			<a href="#" class="btn btn-primary mt-20">See All</a>
+			<a href="{% url "all-manga" %}" class="btn btn-primary mt-20">See All</a>
 		</div>
 	</div>
 	<br>
