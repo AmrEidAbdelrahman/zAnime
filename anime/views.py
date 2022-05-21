@@ -10,7 +10,8 @@ from comments.models import Comment
 from manga.models import Manga
 from reviews.forms import ReviewForm
 from reviews.models import Review
-from user.models import Favorit, List, ListItem
+from user.models import Favorit
+from lists.models import List, ListItem
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from rest_framework.viewsets import ModelViewSet
@@ -184,7 +185,7 @@ def add_to_list(request):
 
 @login_required(login_url='/login/')
 def remove_from_list(request):
-    if request.is_ajax and request.method == "POST":
+    if request.method == "POST":
         try:
             manga_id = request.POST.get('manga_id')
             list_name = request.POST.get('list_name')
@@ -265,6 +266,16 @@ class MyListView(ModelViewSet):
             'tab': 'lists',
         }
         return render(request, 'anime/lists.html', context)
+
+    def retrieve(self, request, *args, **kwargs):
+        print("retrieve")
+        instance = get_object_or_404(List, name=kwargs['pk'])
+        print(instance.listitem_set.all())
+        context = {
+            'list': instance,
+            'tab': 'lists',
+        }
+        return render(request, 'anime/list.html', context)
 
 
 @login_required(login_url='/login/')

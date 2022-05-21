@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'chapter',
     'comments',
     'reviews',
+    'lists',
 
     'user',
 

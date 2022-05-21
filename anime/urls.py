@@ -7,10 +7,11 @@ urlpatterns = [
     path('', IndexView.as_view({'get': 'list'}), name='index'),
 
     path('all-manga/', MangaListView.as_view({'get': 'list'}), name='all-manga'),
+
     path('favlist/', Favlist, name='fav-list'),
 
     path('lists/', MyListView.as_view({'get': 'list'}), name='mylist'),
-    path('listdetails/<str:list_name>/', ListDetails, name='list-details'),
+    path('listdetails/<str:pk>/', MyListView.as_view({'get': 'retrieve'}), name='list-details'),
 
     path('comment/', CommentView, name='comment'),
     # path('reply/', ReplyView, name='reply'),
@@ -28,3 +29,6 @@ urlpatterns = [
     path('<str:manga_name>/<int:chapter_number>/', ChapterView, name='chapter'),
     path('<str:manga_name>/', manga, name='manga'),
 ]
+
+
+

@@ -3,7 +3,8 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 
 from chapter.models import Chapter
-from .models import Profile, Notification, List
+from lists.models import List
+from .models import Profile, Notification
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
