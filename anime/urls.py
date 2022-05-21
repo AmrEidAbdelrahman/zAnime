@@ -26,6 +26,8 @@ urlpatterns = [
     path('remove_from_list/', remove_from_list, name='remove-from-list'),
     path('delete_list/', delete_list, name='delete-list'),
 
+    # path('chapter/', include('chapter.urls', namespace='chapters')),
+
     path('<str:manga_name>/<int:chapter_number>/', ChapterView, name='chapter'),
     path('<str:manga_name>/', manga, name='manga'),
 ]

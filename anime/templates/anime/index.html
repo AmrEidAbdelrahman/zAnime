@@ -8,7 +8,8 @@
 		border-radius: 5px;
 	}
 	.manga_header{
-		margin-left:20%;
+		margin-left:5%;
+        margin-bottom: 3%;
 	}
 
 	.card {
@@ -20,11 +21,15 @@
 		height: 210px;
 	}
 
+    .chapters > span {
+        width: 180px;
+    }
+
 {% endblock style %}
 {% block content %}
-	<div class="container ">
-		<div class="row justify-content-center">
-			<h1 class="manga_header">Manga</h1>
+	<div class="container">
+        <h1 class="manga_header">Manga</h1>
+        <div class="row justify-content-center">
 			{% for m in manga %}
 			<div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
 			  	<img src="/media/poster.webp" class="card-img-top rounded" alt="...">
@@ -41,11 +46,11 @@
 	<div class="container">
 		<h1 class="" >Latest Chapter</h1>
 		<ul class="list-group">
-		{% for chap in chapter %}
+		{% for chap in chapters %}
 			  <li class="list-group-item d-flex mb-2">
 			    <img src="/media/poster.webp" class="chap_img">
-			    <div>
-				    <div class="d-block fs-3">{{ chap.manga.name }}</div>
+			    <div class="chapters">
+				    <a href="{% url "chapter" chap.manga.title chap.id %}" class="d-block fs-3">{{ chap.manga.title }}</a>
 				    <span class="d-block p-1 bg-primary rounded-pill text-white">Chapter {{ chap.chapter_number }} <span class="bg-danger pr-2 pl-2 rounded-pill text-white">New</span></span>
 			    </div>
 			  </li>

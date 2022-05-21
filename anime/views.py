@@ -1,3 +1,5 @@
+from datetime import time, timezone
+
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.generic import ListView
@@ -43,12 +45,13 @@ def testview(request, room_name='event'):
 class IndexView(ModelViewSet):
     model = Manga
     paginated_by = 10
-    queryset = Manga.objects.all()[:10]
 
     def list(self, request, *args, **kwargs):
-        qs = self.get_queryset()
+        manga_qs = Manga.objects.all()[:10]
+        chapters_qs = Chapter.objects.all().order_by("created_at")[:10]
         context = {
-            'manga': qs,
+            'manga': manga_qs,
+            'chapters': chapters_qs,
             'tab': 'home',
         }
         return render(request, 'anime/index.html', context)
@@ -331,16 +334,15 @@ def delete_list(request):
 def Favlist(request):
     user = request.user
     fav_items = user.favorit_set.all()
-
+    print(fav_items)
     paginator = Paginator(fav_items, 15)  # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-
         'tab': 'fav',
         'page_obj': page_obj,
     }
-    return render(request, 'anime/list.html', context)
+    return render(request, 'anime/favorit.html', context)
 
 
 def ChapterView(request, manga_name, chapter_number):

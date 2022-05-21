@@ -1,0 +1,31 @@
+{% extends 'anime/base.html' %}
+
+{% block style %}
+	.manga_header{
+		margin-left:10%;
+	}
+
+	.card {
+		border: none;
+		max-height: 500px;
+	}
+
+{% endblock style %}
+
+{% block content %}
+	<div class="container ">
+		<div class="row justify-content-center">
+			<h1 class="manga_header">Favorit Items</h1>
+			{% for obj in page_obj %}
+			<div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
+			  	<img src="/media/poster.webp" class="card-img-top rounded" alt="...">
+			 	<div class="">
+			    	<a href="{% url 'manga' obj.manga.title %}"><p  class="mt-2">{{ obj.manga.title }}</p></a>
+			    	<!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+			  	</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+    {% include "partials/pagination.html" with page_obj=page_obj %}
+{% endblock content%}
