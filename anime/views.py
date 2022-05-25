@@ -345,34 +345,6 @@ def Favlist(request):
     return render(request, 'anime/favorit.html', context)
 
 
-def ChapterView(request, manga_name, chapter_number):
-    manga = Manga.objects.get(name=manga_name)
-    chapter = manga.chapter_set.get(chapter_number=chapter_number)
-    print(chapter.chapter_number)
-    all_chapter = manga.chapter_set.values_list('chapter_number', flat=True)
-    try:
-        imgs = chapter.imgs[1:-1]
-        imgs = imgs.split("\', \'")
-        imgs[0] = imgs[0][1:]
-        imgs[-1] = imgs[-1][:-2]
-    except:
-        imgs = None
-    form = CommentForm()
-
-    comments = chapter.comment_set.order_by("-pub_date").all()
-
-    context = {
-        'manga': manga,
-        'chapter': chapter,
-        'all_chapter': all_chapter,
-        'imgs': imgs,
-        'has_next': chapter.has_next(),
-        'has_pre': chapter.has_pre(),
-        'form': form,
-        'comments': comments,
-    }
-    return render(request, 'anime/chapter.html', context)
-
 
 @login_required(login_url='/login/')
 def CommentView(request):

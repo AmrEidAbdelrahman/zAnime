@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import manga, MangaListView, add_to_fav, remove_from_fav, add_to_list, remove_from_list, \
     add_new_list, \
-    ListDetails, Favlist, ChapterView, CommentView, ReviewView, edit_list, delete_list, testview, IndexView, MyListView
+    ListDetails, Favlist, CommentView, ReviewView, edit_list, delete_list, testview, IndexView, MyListView
 
 urlpatterns = [
     path('', IndexView.as_view({'get': 'list'}), name='index'),
@@ -25,12 +25,11 @@ urlpatterns = [
     path('add_to_list/', add_to_list, name='add-to-list'),
     path('remove_from_list/', remove_from_list, name='remove-from-list'),
     path('delete_list/', delete_list, name='delete-list'),
+    # path('latest-chapters/', LatestChapterView, name='latest-chapters'),
 
-    # path('chapter/', include('chapter.urls', namespace='chapters')),
+    path('manga/', include('manga.urls', namespace='manga')),
 
-    path('<str:manga_name>/<int:chapter_number>/', ChapterView, name='chapter'),
-    path('<str:manga_name>/', manga, name='manga'),
+    # path('<str:manga_name>/', manga, name='manga'),
+    # path('<str:manga_name>/', include('chapter.urls', namespace="chapters")),
+
 ]
-
-
-

@@ -1,6 +1,10 @@
 from django.urls import path
 
+from chapter.views import ChapterView
+
+app_name = "chapter"
+
 urlpatterns = [
-    # path('', , name='latest'),
-    # path('<int:pk>/', , name='detail'),
+    path('', ChapterView.as_view({'get': 'list'}), name='latest'),
+    path('<int:pk>/', ChapterView.as_view({'get': 'retrieve'}), name='details'),
 ]
