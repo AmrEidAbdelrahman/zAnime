@@ -50,11 +50,14 @@ class IndexView(ModelViewSet):
         manga_qs = Manga.objects.all()[:10]
         chapters_qs = Chapter.objects.all().order_by("created_at")[:10]
         context = {
-            'manga': manga_qs,
+            'manga_list': manga_qs,
             'chapters': chapters_qs,
             'tab': 'home',
         }
         return render(request, 'anime/index.html', context)
+
+    def latest_chapter(self, request, *args, **kwargs):
+        print("latest_chapter")
 
 
 def manga(request, manga_name):

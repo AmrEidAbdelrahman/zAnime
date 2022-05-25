@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('notification/', user_views.NotificationView, name='notification'),
 
-    path('profile/', user_views.profile, name='profile'),
+    path('user/', include('user.urls', namespace='users')),
     path('', include('anime.urls')),
 ]
 

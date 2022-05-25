@@ -6,9 +6,9 @@ from .views import manga, MangaListView, add_to_fav, remove_from_fav, add_to_lis
 urlpatterns = [
     path('', IndexView.as_view({'get': 'list'}), name='index'),
 
-    path('all-manga/', MangaListView.as_view({'get': 'list'}), name='all-manga'),
+    # path('all-manga/', MangaListView.as_view({'get': 'list'}), name='all-manga'),
 
-    path('favlist/', Favlist, name='fav-list'),
+    # path('favlist/', Favlist, name='fav-list'),
 
     path('lists/', MyListView.as_view({'get': 'list'}), name='mylist'),
     path('listdetails/<str:pk>/', MyListView.as_view({'get': 'retrieve'}), name='list-details'),
@@ -25,7 +25,7 @@ urlpatterns = [
     path('add_to_list/', add_to_list, name='add-to-list'),
     path('remove_from_list/', remove_from_list, name='remove-from-list'),
     path('delete_list/', delete_list, name='delete-list'),
-    # path('latest-chapters/', LatestChapterView, name='latest-chapters'),
+    path('latest-chapters/', IndexView.as_view({'get': 'latest_chapter'}), name='latest-chapters'),
 
     path('manga/', include('manga.urls', namespace='manga')),
 

@@ -30,36 +30,37 @@
     <div class="container">
         <h1 class="manga_header">Manga</h1>
         <div class="row justify-content-center">
-            {% for m in manga %}
+            {% for manga in manga_list %}
                 <div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
                     <img src="/media/poster.webp" class="card-img-top rounded" alt="...">
                     <div class="">
-                        <a href="{% url 'manga' m.title %}"><p class="mt-2">{{ m.title }}</p></a>
+                        <a href="{% url 'manga:details' manga.id %}"><p class="mt-2">{{ manga.title }}</p></a>
                         <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
                     </div>
                 </div>
             {% endfor %}
-            <a href="{% url "all-manga" %}" class="btn btn-primary mt-20">See All</a>
+            <a href="{% url "manga:index" %}" class="btn btn-primary mt-20">See All</a>
         </div>
     </div>
     <br>
     <div class="container">
         <h1 class="">Latest Chapter</h1>
         <ul class="list-group">
-            {% for chap in chapters %}
+            {% for chapter in chapters %}
                 <li class="list-group-item d-flex mb-2">
-                    <img src="/media/poster.webp" class="chap_img">
+                    <img src="/media/poster.webp" class="chapter_img">
                     <div class="chapters">
-                        <a href="{% url "chapter:details" chap.manga.title chap.id %}"
-                           class="d-block fs-3">{{ chap.manga.title }}</a>
-                        <span class="d-block p-1 bg-primary rounded-pill text-white">Chapter {{ chap.chapter_number }} <span
-                                class="bg-danger pr-2 pl-2 rounded-pill text-white">New</span></span>
+                        <a href=""
+                           class="d-block fs-3">{{ chapter.manga.title }}</a>
+                        <span class="d-block p-1 bg-primary rounded-pill text-white">
+                            chapter {{ chapter.chapter_number }}
+                            <span class="bg-danger pr-2 pl-2 rounded-pill text-white">New</span>
+                        </span>
                     </div>
                 </li>
-                <span></span>
             {% endfor %}
         </ul>
-        <a href="{% url "chapter:latest" "latest" %}" class="btn btn-primary mt-20">See All</a>
+        <a href="{% url "latest-chapters" %}" class="btn btn-primary mt-20">See All</a>
     </div>
 
 
