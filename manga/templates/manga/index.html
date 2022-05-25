@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-manga index
-</body>
-</html>
+{% extends 'anime/base.html' %}
+
+{% block style %}
+	.manga_header{
+		margin-left:10%;
+	}
+
+	.card {
+		border: none;
+		max-height: 500px;
+	}
+
+{% endblock style %}
+
+{% block content %}
+	<div class="container ">
+		<div class="row justify-content-center">
+			<h1 class="manga_header">Manga</h1>
+			{% for manga in manga_list %}
+			<div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
+			  	<img src="/media/poster.webp" class="card-img-top rounded" alt="...">
+			 	<div class="">
+			    	<a href="{% url 'manga:details' manga.id %}"><p  class="mt-2">{{ manga.title }}</p></a>
+			  	</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% include 'partials/pagination.html' with page_obj=manga_list %}
+{% endblock content%}
