@@ -2,156 +2,178 @@
 
 {% block style %}
 
-	.chapter_header {
-		height: 400px;
-	}
+    .chapter_header {
+    height: 400px;
+    }
 
 {% endblock style %}
 
 {% block content %}
-<div class="container chapter_header">
-	<h1>{{ manga.name }}</h1>
-</div>
-<div class="chapter_body container">
-	<div class="dropdown d-inline">
-	  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-	    Select Chapter
-	  </button>
-	  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-	    {% for chapter in all_chapter %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'manga:index' %}">Manga List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    <a href="{% url 'manga:details' chapter.manga.id %}">{{ chapter.manga.title }}</a>
+                </li>
+                <li class="breadcrumb-item">chapter {{ chapter.chapter_number }}</li>
+            </ol>
+        </nav>
 
-	    <li><a class="dropdown-item" href="{% url 'manga:chapter:details' manga.id chapter.id %}">Chapter {{chapter.id}}</a></li>
-	    {% endfor %}
-	    <li><a class="dropdown-item" href="#">Another action</a></li>
-	    <li><a class="dropdown-item" href="#">Something else here</a></li>
-	  </ul>
-	</div>
+        <div class="container chapter_header">
+            <h1>{{ manga.name }}</h1>
+        </div>
+        <div class="chapter_body container">
+            <div class="dropdown d-inline">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Chapter
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for chapter in chapter.manga.chapter_set.all %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'manga:chapter:details' chapter.manga.id chapter.id %}">Chapter {{ chapter.chapter_number }}</a>
+                        </li>
+                    {% endfor %}
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
 
-	<div class="pre-next d-inline float-end mr-5">
-		{% if has_pre %}
-		<a href='{% url "manga:chapter:details" manga.id chapter.chapter_number|add:"-1" %}' class="btn btn-primary mr-2 w-75 d-inline">Previouse</a>
-		{% endif %}
-		{% if has_next %}
-		<a href="{% url 'manga:chapter:details' manga.name chapter.chapter_number|add:'1' %}" class="btn btn-primary w-75 d-inline">Next</a>
-		{% endif %}
-	</div>
-</div>
-<div class="container text-centers">
-	{% for i in imgs %}
-		<img src="{{i}}" style="width:80%">
-	{% endfor %}
-</div>
-<div class="container">
-	<h1>Comments</h1>
-	<form id="comment" method="POST" >
-		{% csrf_token %}
-		<input type="hidden" name="manga_name" value="{{ manga.name }}">
-		<input type="hidden" name="chapter_number" value="{{ chapter.chapter_number }}">
-		<div class="mb-3">
-		  <label for="exampleFormControlTextarea1" class="form-label ml-5">Comment</label>
-		  {{ form.content }}
-		</div>
-		
-		<button type="submit" class="btn btn-primary" >Comment</button>
-	</form>
-</div>
-<div class="container" id="comments_section">
-	<h1 id="comment_header">Comments</h1>
-	<div id="comment_body">
-		{% for comment in comments %}
-			<div class="card mb-3">
-			  <div class="card-header">
-			    {{comment.user.username}}
-			  </div>
-			  <div class="card-body">
-			    <p class="card-text">{{comment.content}}</p>
-			    <div class="accordion" id="accordionExample">
-				  <div class="">
-				    <h2 class="accordion-header" id="headingOne">
-				      <a href="" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne">
-				        reply
-				      </a>
-				    </h2>
-				    <div id="collapseOne{{forloop.counter}}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-				      <div class="accordion-body">
-				      	<div class="mb-5">
-					      	{% for reply in comment.reply_set.all %}
-					      		<div>
-					      			{{ reply }}
-					      		</div>
-					      	{% endfor %}
-				      	</div>
-				      	<form id="reply{{forloop.counter}}" method="POST" >
-							{% csrf_token %}
-							<input type="hidden" name="comment_id" value="{{ comment.id }}">
-							<div class="mb-3">
-							  	{{ form.content }}
-								<button type="submit" class="btn btn-primary mt-3 ml-5" >Reply</button>
-							</div>
-							
-						</form>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-			  </div>
-			</div>
-		{% endfor %}
-	</div>
-</div>
-{% endblock content%}
+            <div class="pre-next d-inline float-end mr-5">
+                {% if has_pre %}
+                    <a href='{% url "manga:chapter:details" manga.id chapter.chapter_number|add:"-1" %}'
+                       class="btn btn-primary mr-2 w-75 d-inline">Previouse</a>
+                {% endif %}
+                {% if has_next %}
+                    <a href="{% url 'manga:chapter:details' manga.name chapter.chapter_number|add:'1' %}"
+                       class="btn btn-primary w-75 d-inline">Next</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container text-centers">
+            {% for i in imgs %}
+                <img src="{{ i }}" style="width:80%">
+            {% endfor %}
+        </div>
+        <div class="container">
+            <h1>Comments</h1>
+            <form id="comment" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="manga_name" value="{{ manga.name }}">
+                <input type="hidden" name="chapter_number" value="{{ chapter.chapter_number }}">
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label ml-5">Comment</label>
+                    {{ form.content }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </form>
+        </div>
+        <div class="container" id="comments_section">
+            <h1 id="comment_header">Comments</h1>
+            <div id="comment_body">
+                {% for comment in comments %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ comment.user.username }}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ comment.content }}</p>
+                            <div class="accordion" id="accordionExample">
+                                <div class="">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <a href="" class="btn" type="button" data-bs-toggle="collapse"
+                                           data-bs-target="#collapseOne{{ forloop.counter }}" aria-expanded="true"
+                                           aria-controls="collapseOne">
+                                            reply
+                                        </a>
+                                    </h2>
+                                    <div id="collapseOne{{ forloop.counter }}" class="accordion-collapse collapse show"
+                                         aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="mb-5">
+                                                {% for reply in comment.reply_set.all %}
+                                                    <div>
+                                                        {{ reply }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <form id="reply{{ forloop.counter }}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                                <div class="mb-3">
+                                                    {{ form.content }}
+                                                    <button type="submit" class="btn btn-primary mt-3 ml-5">Reply
+                                                    </button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
 
 {% block js %}
-</script>
-<script type="text/javascript">
-	
-	$("#select_chapter").change(function(e){
-		val = $(this).find(":selected").val().slice(7,).trim()
-      // TODO manga_id
-		var url_mask = "{% url 'manga:chapter:details' 1 '2658935404' %}".replace('2658935404',val.toString());
-		window.location.href = url_mask;
-	})
+    </script>
+    <script type="text/javascript">
 
-	$("#comment").submit(function(e){
-		e.preventDefault();
-		var content = $(this).children("textarea#id_content").val();
-		var serializedData = $(this).serialize();
-		$.ajax({
-	        url: "{% url 'comment' %}",
-	        type: 'POST',
-	        data: serializedData,
-	        success: function(response) {
-	        	$("textarea#id_content").val("");
-	        	$("#comment_body").prepend("<div class='card'><div class='card-header'>"+ response["username"].toString() +"</div><div class='card-body'><p class='card-text'>"+content.toString()+"</p><a href='#' class='btn btn-primary'>Go somewhere</a></div></div>");
-	        },
-            error: function (response) {
-                // alert the error if any error occured
-                alert(response["responseJSON"]["error"]);
-            },
-    	})
-	})
+      $("#select_chapter").change(function (e) {
+        val = $(this).find(":selected").val().slice(7,).trim()
+        // TODO manga_id
+        var url_mask = "{% url 'manga:chapter:details' 1 '2658935404' %}".replace('2658935404', val.toString());
+        window.location.href = url_mask;
+      })
 
-	$("form").submit(function(e){
-		e.preventDefault();
-		console.log("reply entered")
-		t = $(this)
-		var content = $(this).children("textarea#id_content").val();
-		var serializedData = $(this).serialize();
-		$.ajax({
-            // TODO create reply
-	        //url: "{'% url 'reply' %}",
-	        type: 'POST',
-	        data: serializedData,
-	        success: function(response) {
-	        	$("textarea#id_content").val("");
-	        	console.log("reply sent seuccessfully")
-	        	$("#comment_body").prepend("<div class='card'><div class='card-header'>"+ response["username"].toString() +"</div><div class='card-body'><p class='card-text'>"+content.toString()+"</p><a href='#' class='btn btn-primary'>Go somewhere</a></div></div>");
-	        },
-            error: function (response) {
-                // alert the error if any error occured
-                alert(response["responseJSON"]["error"]);
-            },
-    	})
-	})
+      $("#comment").submit(function (e) {
+        e.preventDefault();
+        var content = $(this).children("textarea#id_content").val();
+        var serializedData = $(this).serialize();
+        $.ajax({
+          url: "{% url 'comment' %}",
+          type: 'POST',
+          data: serializedData,
+          success: function (response) {
+            $("textarea#id_content").val("");
+            $("#comment_body").prepend("<div class='card'><div class='card-header'>" + response["username"].toString() + "</div><div class='card-body'><p class='card-text'>" + content.toString() + "</p><a href='#' class='btn btn-primary'>Go somewhere</a></div></div>");
+          },
+          error: function (response) {
+            // alert the error if any error occured
+            alert(response["responseJSON"]["error"]);
+          },
+        })
+      })
+
+      $("form").submit(function (e) {
+        e.preventDefault();
+        console.log("reply entered")
+        t = $(this)
+        var content = $(this).children("textarea#id_content").val();
+        var serializedData = $(this).serialize();
+        $.ajax({
+          // TODO create reply
+          //url: "{'% url 'reply' %}",
+          type: 'POST',
+          data: serializedData,
+          success: function (response) {
+            $("textarea#id_content").val("");
+            console.log("reply sent seuccessfully")
+            $("#comment_body").prepend("<div class='card'><div class='card-header'>" + response["username"].toString() + "</div><div class='card-body'><p class='card-text'>" + content.toString() + "</p><a href='#' class='btn btn-primary'>Go somewhere</a></div></div>");
+          },
+          error: function (response) {
+            // alert the error if any error occured
+            alert(response["responseJSON"]["error"]);
+          },
+        })
+      })
 
 {% endblock js %}

@@ -15,7 +15,10 @@ class ChapterView(ModelViewSet):
         return render(request, 'chapter/index.html', {})
 
     def retrieve(self, request, *args, **kwargs):
-        return render(request, 'chapter/details.html', {})
+        chapter = self.get_object()
+        return render(request, 'chapter/details.html', {
+            'chapter': chapter,
+        })
 
 
 # def ChapterView(request, manga_name, chapter_number):

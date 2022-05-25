@@ -18,7 +18,7 @@ class Chapter(models.Model):
     # imgs = models.TextField(null=True)
 
     def __str__(self):
-        return f'{self.manga.title} Chapter {self.chapter_number}'
+        return f'{self.manga.title} Chapter {self.id}'
 
     @property
     def has_next(self):
