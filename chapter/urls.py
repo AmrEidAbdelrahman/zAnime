@@ -6,5 +6,5 @@ app_name = "chapter"
 
 urlpatterns = [
     path('', ChapterView.as_view({'get': 'list'}), name='latest'),
-    path('<int:pk>/', ChapterView.as_view({'get': 'retrieve'}), name='details'),
+    path('<int:chapter_pk>/', ChapterView.as_view({'get': 'retrieve'}), name='details'),
 ]

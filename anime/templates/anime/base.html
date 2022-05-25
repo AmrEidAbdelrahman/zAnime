@@ -114,13 +114,13 @@
 		            <a class="nav-link " href="{% url 'manga:index' %}"><i class="fas fa-tachometer-alt"></i>Manga</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'fav' %}active{% endif %}">
-		            <a class="nav-link" href="{% url 'fav-list' %}"><i class="far fa-address-book"></i>Fav</a>
+		            <a class="nav-link" href="{% url 'users:fav-list' %}"><i class="far fa-address-book"></i>Fav</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'home' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'index' %}"><i class="far fa-clone"></i>Home</a>
 		        </li>
 		        <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
-		            <a class="nav-link" href="{% url 'profile' %}"><i class="far fa-calendar-alt"></i>Profile</a>
+		            <a class="nav-link" href="{% url 'users:profile' %}"><i class="far fa-calendar-alt"></i>Profile</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'lists' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'mylist' %}"><i class="far fa-chart-bar"></i>My List</a>

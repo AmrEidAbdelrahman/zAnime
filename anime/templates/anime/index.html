@@ -50,7 +50,7 @@
                 <li class="list-group-item d-flex mb-2">
                     <img src="/media/poster.webp" class="chapter_img">
                     <div class="chapters">
-                        <a href=""
+                        <a href="{% url "manga:chapter:details" chapter.manga.id chapter.id %}"
                            class="d-block fs-3">{{ chapter.manga.title }}</a>
                         <span class="d-block p-1 bg-primary rounded-pill text-white">
                             chapter {{ chapter.chapter_number }}
