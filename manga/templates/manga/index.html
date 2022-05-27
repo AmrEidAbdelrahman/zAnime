@@ -20,7 +20,7 @@
 			<div class="card col-lg-2 col-md-6 col-sm-9 mr-2 ml-2 mb-4" style="width: 18rem;">
 			  	<img src="/media/poster.webp" class="card-img-top rounded" alt="...">
 			 	<div class="">
-			    	<a href="{% url 'manga:details' manga.id %}"><p  class="mt-2">{{ manga.title }}</p></a>
+			    	<a href="{% url 'main:manga:details' manga.id %}"><p  class="mt-2">{{ manga.title }}</p></a>
 			  	</div>
 			</div>
 			{% endfor %}

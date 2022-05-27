@@ -167,73 +167,73 @@
     <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <script type="text/javascript" src="{% static 'anime/js/script.js' %}"></script>
-    <script type="text/javascript">
-    	function display_notification(){
-    		console.log()
-    		if ($("#notification-body").css("display") == "block"){
-    			$("#notification-body").css("display", "none");
-    		}
-    		else {
-    			$("#notifiaction_number").css("visiblity","hidden");
-    			$("#notifiaction_number").text("0");
-    			$("#notification-body").css("display","inline");
-    			$.ajax({
-    				typr: 'GET',
-    				url: "{% url 'notification' %}",
-    				success: function(response){
-    					console.log("GET NOTIFICATIONS DONE!");
-    					console.log(response);
-    					data = response["data"];
-    					res = "";
-    					for(var i=0 ; i < 6 ; i++ ){
-    						res += "<div class='notification row mb-2'><div class='col-2'><img src=''></div><div class='col'><span>notification header</span><div>notification detials</div><span class='mt-5'>time</span></div></div>";
-    						console.log(i)
-    					}
-    					$("#notification-body").empty();
-    					$("#notification-body").append(res);
-    				},
-    				error: function(response){
-    					console.log("ERROR");
-    				},
-    			});
-    		}
-    	}
-    	{% block js %}{% endblock js %}
-    </script>
+{#    <script type="text/javascript">#}
+{#    	function display_notification(){#}
+{#    		console.log()#}
+{#    		if ($("#notification-body").css("display") == "block"){#}
+{#    			$("#notification-body").css("display", "none");#}
+{#    		}#}
+{#    		else {#}
+{#    			$("#notifiaction_number").css("visiblity","hidden");#}
+{#    			$("#notifiaction_number").text("0");#}
+{#    			$("#notification-body").css("display","inline");#}
+{#    			$.ajax({#}
+{#    				typr: 'GET',#}
+{#    				url: "{% url 'notification' %}",#}
+{#    				success: function(response){#}
+{#    					console.log("GET NOTIFICATIONS DONE!");#}
+{#    					console.log(response);#}
+{#    					data = response["data"];#}
+{#    					res = "";#}
+{#    					for(var i=0 ; i < 6 ; i++ ){#}
+{#    						res += "<div class='notification row mb-2'><div class='col-2'><img src=''></div><div class='col'><span>notification header</span><div>notification detials</div><span class='mt-5'>time</span></div></div>";#}
+{#    						console.log(i)#}
+{#    					}#}
+{#    					$("#notification-body").empty();#}
+{#    					$("#notification-body").append(res);#}
+{#    				},#}
+{#    				error: function(response){#}
+{#    					console.log("ERROR");#}
+{#    				},#}
+{#    			});#}
+{#    		}#}
+{#    	}#}
+{#    	{% block js %}{% endblock js %}#}
+{#    </script>#}
     
 <!-- Notification Web Socket -->
-<script>
-    var socket = new WebSocket("ws://localhost:8000/ws/someurl/") // Creating a new Web Socket Connection
-
-    // Socket On receive message Functionality
-    socket.onmessage = function(event){
-    	var data = JSON.parse(event.data)
-        console.log('message' + data['message']);
-        $("#notifiaction_number").css("display","inline")
-        prev = parseInt($("#notifiaction_number").text());
-        console.log(prev);
-        $("#notifiaction_number").text(prev+1);
-        //$("body").append("<h3>"+e.data+"</h3>")
-        // Can write any functionality based on your requirement
-
-    }
-
-    // Socket Connet Functionality
-    socket.onopen = function(e){
-        console.log('open', e)
-    }
-
-    // Socket Error Functionality
-    socket.onerror = function(e){
-        console.log('error', e)
-    }
-
-    // Socket close Functionality
-    socket.onclose = function(e){
-        console.log('closed', e)
-    }
-</script>
-
+{#<script>#}
+{#    var socket = new WebSocket("ws://localhost:8000/ws/someurl/") // Creating a new Web Socket Connection#}
+{##}
+{#    // Socket On receive message Functionality#}
+{#    socket.onmessage = function(event){#}
+{#    	var data = JSON.parse(event.data)#}
+{#        console.log('message' + data['message']);#}
+{#        $("#notifiaction_number").css("display","inline")#}
+{#        prev = parseInt($("#notifiaction_number").text());#}
+{#        console.log(prev);#}
+{#        $("#notifiaction_number").text(prev+1);#}
+{#        //$("body").append("<h3>"+e.data+"</h3>")#}
+{#        // Can write any functionality based on your requirement#}
+{##}
+{#    }#}
+{##}
+{#    // Socket Connet Functionality#}
+{#    socket.onopen = function(e){#}
+{#        console.log('open', e)#}
+{#    }#}
+{##}
+{#    // Socket Error Functionality#}
+{#    socket.onerror = function(e){#}
+{#        console.log('error', e)#}
+{#    }#}
+{##}
+{#    // Socket close Functionality#}
+{#    socket.onclose = function(e){#}
+{#        console.log('closed', e)#}
+{#    }#}
+{#</script>#}
+{% block script %}{% endblock %}
 
 </body>
 </html>
