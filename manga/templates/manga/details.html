@@ -159,8 +159,8 @@
 	  <div class="card-header">
 	    <nav aria-label="breadcrumb">
 		  <ol class="breadcrumb">
-		    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-		    <li class="breadcrumb-item"><a href="{% url 'manga:index' %}">Manga List</a></li>
+		    <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Home</a></li>
+		    <li class="breadcrumb-item"><a href="{% url 'main:manga:index' %}">Manga List</a></li>
 		    <li class="breadcrumb-item active" aria-current="page">{{ manga.title }}</li>
 		  </ol>
 		</nav>
@@ -223,7 +223,7 @@
 		<h2 class="mt-3">Chapters</h2>
 		<ul class="list-group">
 		{% for chapter in manga.chapter_set.all %}
-			<a href="{% url 'manga:chapter:details' manga.id chapter.id %}" class="mb-2">
+			<a href="{% url 'main:manga:chapter:details' manga.id chapter.id %}" class="mb-2">
 			  <li class="list-group-item d-flex  hover">
 			    <img src="/media/poster.webp" class="chap_img">
 			    <div>
@@ -324,7 +324,7 @@
       	console.log("primary")
         $.ajax({
             type: 'POST',
-            url: "{% url 'add-to-fav' %}",
+            url: "{% url 'main:add-to-fav' %}",
             data: serializedData,
             success: function (response) {
                 // on successfull creating object
@@ -344,7 +344,7 @@
       else if(btn.hasClass('btn-danger')){
       	$.ajax({
             type: 'POST',
-            url: "{% url 'remove-from-fav' %}",
+            url: "{% url 'main:remove-from-fav' %}",
             data: serializedData,
             success: function (response) {
                 // on successfull creating object
@@ -378,7 +378,7 @@
       if(btn.text().trim() == '+'){
         $.ajax({
             type: 'POST',
-            url: "{% url 'add-to-list' %}",
+            url: "{% url 'main:add-to-list' %}",
             data: serializedData,
             success: function (response) {
                 // on successfull creating object
@@ -399,7 +399,7 @@
       	console.log("primary")
       	$.ajax({
             type: 'POST',
-            url: "{% url 'remove-from-list' %}",
+            url: "{% url 'main:remove-from-list' %}",
             data: serializedData,
             success: function (response) {
                 // on successfull creating object
@@ -476,7 +476,7 @@
 		// make POST ajax call
 	    $.ajax({
 	        type: 'POST',
-	        url: "{% url 'add-new-list' %}",
+	        url: "{% url 'main:add-new-list' %}",
 	        data: serializedData,
 	        dataType: "json",
 	        success: function (response) {
@@ -503,7 +503,7 @@
 		console.log(serializedData);
 		$.ajax({
 			type: 'POST',
-			url: "{% url 'submit-review' %}",
+			url: "{% url 'main:submit-review' %}",
 			data: serializedData,
 			dataType: "json",
 			success: function(response){

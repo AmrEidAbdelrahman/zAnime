@@ -12,10 +12,10 @@
     <div class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'manga:index' %}">Manga List</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'main:manga:index' %}">Manga List</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    <a href="{% url 'manga:details' chapter.manga.id %}">{{ chapter.manga.title }}</a>
+                    <a href="{% url 'main:manga:details' chapter.manga.id %}">{{ chapter.manga.title }}</a>
                 </li>
                 <li class="breadcrumb-item">chapter {{ chapter.chapter_number }}</li>
             </ol>
@@ -34,7 +34,7 @@
                     {% for chapter in chapter.manga.chapter_set.all %}
                         <li>
                             <a class="dropdown-item"
-                               href="{% url 'manga:chapter:details' chapter.manga.id chapter.id %}">Chapter {{ chapter.chapter_number }}</a>
+                               href="{% url 'main:manga:chapter:details' chapter.manga.id chapter.id %}">Chapter {{ chapter.chapter_number }}</a>
                         </li>
                     {% endfor %}
                     <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -44,11 +44,11 @@
 
             <div class="pre-next d-inline float-end mr-5">
                 {% if has_pre %}
-                    <a href='{% url "manga:chapter:details" manga.id chapter.chapter_number|add:"-1" %}'
+                    <a href='{% url "main:manga:chapter:details" manga.id chapter.chapter_number|add:"-1" %}'
                        class="btn btn-primary mr-2 w-75 d-inline">Previouse</a>
                 {% endif %}
                 {% if has_next %}
-                    <a href="{% url 'manga:chapter:details' manga.name chapter.chapter_number|add:'1' %}"
+                    <a href="{% url 'main:manga:chapter:details' manga.name chapter.chapter_number|add:'1' %}"
                        class="btn btn-primary w-75 d-inline">Next</a>
                 {% endif %}
             </div>
@@ -130,7 +130,7 @@
       $("#select_chapter").change(function (e) {
         val = $(this).find(":selected").val().slice(7,).trim()
         // TODO manga_id
-        var url_mask = "{% url 'manga:chapter:details' 1 '2658935404' %}".replace('2658935404', val.toString());
+        var url_mask = "{% url 'main:manga:chapter:details' 1 '2658935404' %}".replace('2658935404', val.toString());
         window.location.href = url_mask;
       })
 
@@ -139,7 +139,7 @@
         var content = $(this).children("textarea#id_content").val();
         var serializedData = $(this).serialize();
         $.ajax({
-          url: "{% url 'comment' %}",
+          url: "{% url 'main:comment' %}",
           type: 'POST',
           data: serializedData,
           success: function (response) {

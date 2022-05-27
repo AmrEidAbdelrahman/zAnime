@@ -3,6 +3,7 @@ from .views import manga, MangaListView, add_to_fav, remove_from_fav, add_to_lis
     add_new_list, \
     ListDetails, Favlist, CommentView, ReviewView, edit_list, delete_list, testview, IndexView, MyListView
 
+app_name = 'main'
 urlpatterns = [
     path('', IndexView.as_view({'get': 'list'}), name='index'),
 

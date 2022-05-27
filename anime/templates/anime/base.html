@@ -96,7 +96,7 @@
 		<button class="navbar-toggler " type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<i class="fas fa-bars text-white"></i>
 		</button>
-		<form method="GET" class="d-none d-lg-flex" action="{% url 'manga:index' %}">
+		<form method="GET" class="d-none d-lg-flex" action="{% url 'main:manga:index' %}">
 			<input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
 			<button class="btn btn-primary">Search</button>
 		</form>
@@ -111,19 +111,19 @@
 		    <ul class="navbar-nav ml-auto">
 		        <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
 		        <li class="nav-item {% if tab == 'manga' %}active{% endif %}">
-		            <a class="nav-link " href="{% url 'manga:index' %}"><i class="fas fa-tachometer-alt"></i>Manga</a>
+		            <a class="nav-link " href="{% url 'main:manga:index' %}"><i class="fas fa-tachometer-alt"></i>Manga</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'fav' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'users:fav-list' %}"><i class="far fa-address-book"></i>Fav</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'home' %}active{% endif %}">
-		            <a class="nav-link" href="{% url 'index' %}"><i class="far fa-clone"></i>Home</a>
+		            <a class="nav-link" href="{% url 'main:index' %}"><i class="far fa-clone"></i>Home</a>
 		        </li>
 		        <li class="nav-item {% if request.path == '/profile/' %}active{% endif %}">
 		            <a class="nav-link" href="{% url 'users:profile' %}"><i class="far fa-calendar-alt"></i>Profile</a>
 		        </li>
 		        <li class="nav-item {% if tab == 'lists' %}active{% endif %}">
-		            <a class="nav-link" href="{% url 'mylist' %}"><i class="far fa-chart-bar"></i>My List</a>
+		            <a class="nav-link" href="{% url 'main:mylist' %}"><i class="far fa-chart-bar"></i>My List</a>
 		        </li>
 		        
 		        {% if user.is_authenticated %}
