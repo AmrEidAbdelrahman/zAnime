@@ -2,6 +2,7 @@ from datetime import time, timezone
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from rest_framework.pagination import LimitOffsetPagination
@@ -159,6 +160,7 @@ def remove_from_fav(request):
             return JsonResponse({"error": str(e)}, status=404)
 
 
+@csrf_exempt
 @login_required(login_url='/login/')
 def add_to_list(request):
     if request.method == "POST":
@@ -253,35 +255,7 @@ def add_new_list(request):
 #     return render(request, 'anime/lists.html', context)
 
 
-class MyListView(ModelViewSet):
-    model = List
-    paginated_by = 10
-    pagination_class = LimitOffsetPagination
 
-    def get_queryset(self):
-        user = self.request.user
-        return user.list_set.all()
-
-    def list(self, request, *args, **kwargs):
-        qs = self.get_queryset()
-        page = request.GET.get('page', 1)
-        paginator = Paginator(qs, self.paginated_by)
-        lists = paginator.get_page(page)
-        context = {
-            'lists': lists ,
-            'tab': 'lists',
-        }
-        return render(request, 'anime/lists.html', context)
-
-    def retrieve(self, request, *args, **kwargs):
-        print("retrieve")
-        instance = get_object_or_404(List, name=kwargs['pk'])
-        print(instance.listitem_set.all())
-        context = {
-            'list': instance,
-            'tab': 'lists',
-        }
-        return render(request, 'anime/list.html', context)
 
 
 @login_required(login_url='/login/')

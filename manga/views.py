@@ -25,6 +25,11 @@ class MangaView(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         manga_pk = kwargs.get('pk')
         manga = get_object_or_404(Manga, pk=manga_pk)
+        lists = set(manga.listitem_set.all().values_list('lista', flat=True))
+        list = request.user.list_set.all().first()
+        in_main_list = True if list.id in manga.listitem_set.all().values_list('lists', flat=True) else False
+        print(in_main_list)
         return render(request, 'manga/details.html', {
-            'manga': manga
+            'manga': manga,
+            'lists': lists
         })
