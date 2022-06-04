@@ -143,13 +143,6 @@
 {% endblock style %}
 
 {% block content %}
-    <form id="new_option" name="add_new_list" class="d-none  position-absolute top-50 start-25">
-        {% csrf_token %}
-        <div class="d-inline">
-            <input id="new_option_input" type="text" name="new_option" class="form-control d-inline">
-            <button type="submit" class="btn btn-info d-inline">add</button>
-        </div>
-    </form>
 
     <div class="container">
         <div class="card">
@@ -174,11 +167,11 @@
                                 {% endfor %}
                                 <option>new list</option>
                             </select>
-                            <button id='add_list_button' type="submit" class="btn btn-info ">
+                            <button id='add_list_button' type="submit" class="btn btn-info px-3">
                                 {% if in_main_list %}
-                                    -
+                                     -
                                 {% else %}
-                                    +
+                                     +
                                 {% endif %}
                             </button>
                         </form>
