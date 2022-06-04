@@ -163,7 +163,7 @@
                             <select id="lista" name="list_name" data-lists="{{ lists }}">
                                 {% for list in user.list_set.all %}
                                     <option id="{{ list.id }}"
-                                            value="{{ list.name }}">{{ list.name }}</option>
+                                            value="{{ list.id }}">{{ list.name }}</option>
                                 {% endfor %}
                                 <option>new list</option>
                             </select>

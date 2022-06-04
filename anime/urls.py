@@ -1,7 +1,7 @@
 from django.urls import path, include
 
-from .views import add_to_fav, remove_from_fav, add_to_list, remove_from_list, \
-    add_new_list, CommentView, ReviewView, edit_list, delete_list, IndexView
+from .views import add_to_fav, remove_from_fav, remove_from_list, \
+    CommentView, ReviewView, edit_list, delete_list, IndexView
 
 app_name = 'main'
 urlpatterns = [
@@ -19,8 +19,7 @@ urlpatterns = [
     path('remove_from_fav/', remove_from_fav, name='remove-from-fav'),
 
     path('edit_list/<int:list_id>/', edit_list, name='edit-list'),
-    path('add_new_list/', add_new_list, name='add-new-list'),
-    path('add_to_list/', add_to_list, name='add-to-list'),
+    # path('add_new_list/', add_new_list, name='add-new-list'),
     path('remove_from_list/', remove_from_list, name='remove-from-list'),
     path('delete_list/', delete_list, name='delete-list'),
     path('latest-chapters/', IndexView.as_view({'get': 'latest_chapter'}), name='latest-chapters'),

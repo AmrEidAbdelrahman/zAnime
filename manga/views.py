@@ -1,10 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet
 
+from lists.models import List, ListItem
 from manga.models import Manga
 
 
@@ -33,3 +37,19 @@ class MangaView(ModelViewSet):
             'lists': lists,
             'in_main_list': in_main_list,
         })
+
+
+@csrf_exempt
+@login_required(login_url='/login/')
+def toggle_to_list(request, manga_pk, list_pk):
+    if request.method == "GET":
+        print("ADD TO LIST TRIGGERED!")
+        manga = get_object_or_404(Manga, pk=manga_pk)
+        lista = get_object_or_404(List, pk=list_pk)
+        existance = True if ListItem.objects.filter(manga=manga, lista=lista).exists() else False
+        if existance:
+            list_item = ListItem.objects.get(manga=manga, lista=lista)
+            list_item.delete()
+        else:
+            lista.listitem_set.create(manga=manga)
+        return JsonResponse({"message": "Success"}, status=200)

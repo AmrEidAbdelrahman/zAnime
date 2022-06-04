@@ -1,11 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet
 
-from .models import List
+from manga.models import Manga
+from .models import List, ListItem
 
 
 class MyListView(ModelViewSet):
@@ -37,3 +41,8 @@ class MyListView(ModelViewSet):
             'tab': 'lists',
         }
         return render(request, 'lists/list.html', context)
+
+    def create(self, request, *args, **kwargs):
+        print("LIST CREATE TRIGGERED!")
+
+

@@ -247,9 +247,9 @@ const mangaDOM = {
     $div = element.parent();
     $div.append(`
       <form id="create-new-list">
-        <input type="text" placeholder="new list">
+        <input type="text" placeholder="new list" class="form-control">
         <button class="btn btn-primary">Add</button>
-        <a class="btn btn-danger cancel-change">cancel</a>
+        <button class="btn btn-danger cancel-change">cancel</button>
       </from>
     `)
 
@@ -263,14 +263,11 @@ const mangaDOM = {
 }
 
 $(document)
-    .on('click', '#add-new-list', function (e) {
-      console.log("add-new-list clicked");
-    })
     .on('submit', '#add_to_list', function (e) {
       console.log('add_to_list submited');
       e.preventDefault();
-      manga_id = $(this).data('manga');
       $select = $(this).find('select[name="list_name"]');
+      list_id = $select.val();
       list = $select.val();
       if (list === "new list"){
         console.log("render form to create new list");
@@ -279,24 +276,15 @@ $(document)
       else {
         console.log("add to list");
         $.ajax({
-          type: 'POST',
-          url: "/add_to_list/",
-          data: {
-            'list_name': list,
-            'manga_id': manga_id,
-          },
-          dataType: "json",
+          type: 'GET',
+          url: `toggle_to_list/${list_id}/`,
           success: function (response) {
             console.log("added to list");
-            // $('#add_to_list').addClass('d-none');
-            // $('#add_to_list_form').addClass('d-none');
-            // $('.container').css('opacity', '1');
-            // $('#lista option').eq(-1).prop('selected', true);
-            // //===========
-            // $('#option_add').before('<option>' + list + '</option>');
+            $button = $select.closest('form').find('#add_list_button');
+            txt = $button.text()
+            txt === '+' ? $button.text('-') : $button.text('+')
           },
           error: function (response) {
-            // alert the error if any error occured
             alert(response["responseJSON"]["error"]);
           }
         })

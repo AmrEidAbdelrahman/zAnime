@@ -160,31 +160,7 @@ def remove_from_fav(request):
             return JsonResponse({"error": str(e)}, status=404)
 
 
-@csrf_exempt
-@login_required(login_url='/login/')
-def add_to_list(request):
-    if request.method == "POST":
-        try:
-            manga_id = request.POST.get('manga_id')
-            list_name = request.POST.get('list_name')
-            manga = Manga.objects.get(pk=manga_id)
-            user = request.user
-            lista = List.objects.get(user=user, name=list_name)
-            listitem = ListItem.objects.filter(lista=lista, manga=manga)
-            if listitem:
-                pass
-            else:
-                listitem = ListItem(lista=lista, manga=manga)
-                print("what ........")
-                listitem.save()
-            data = {
-                'manga_name': 'manga.name',
-                'list_js': None,
-            }
-            return JsonResponse(data, status=200)
-        except Exception as e:
-            print("crap2")
-            return JsonResponse({"error": str(e)}, status=404)
+
 
 
 '''
