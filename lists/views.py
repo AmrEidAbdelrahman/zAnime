@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -12,7 +13,7 @@ from manga.models import Manga
 from .models import List, ListItem
 
 
-class MyListView(ModelViewSet):
+class MyListView(LoginRequiredMixin, ModelViewSet):
     model = List
     paginated_by = 10
     pagination_class = LimitOffsetPagination
@@ -44,5 +45,5 @@ class MyListView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         print("LIST CREATE TRIGGERED!")
-
+        return JsonResponse({'status': 'ok'})
 

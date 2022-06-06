@@ -40,7 +40,7 @@ class MangaView(ModelViewSet):
 
 
 @csrf_exempt
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def toggle_to_list(request, manga_pk, list_pk):
     if request.method == "GET":
         print("ADD TO LIST TRIGGERED!")

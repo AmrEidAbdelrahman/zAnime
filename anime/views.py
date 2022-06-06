@@ -120,7 +120,7 @@ class MangaListView(ModelViewSet):
         }
         return render(reqeust, 'anime/all_manga.html', context)
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def add_to_fav(request):
     if request.method == "POST":
         try:
@@ -140,7 +140,7 @@ def add_to_fav(request):
             return JsonResponse({"error": "str(e)"}, status=404)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def remove_from_fav(request):
     if request.method == "POST":
         try:
@@ -167,7 +167,7 @@ def remove_from_fav(request):
 '''
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def remove_from_list(request):
     if request.method == "POST":
         try:
@@ -189,29 +189,7 @@ def remove_from_list(request):
             return JsonResponse({"error": str(e)}, status=404)
 
 
-@login_required(login_url='/login/')
-def add_new_list(request):
-    if request.method == "POST":
-        try:
-            new_list = request.POST.get('new_option')
-            user = request.user
-            lista = None
-            try:
-                lista = List.objects.get(user=user, name=new_list)
-            except:
-                pass
 
-            if lista:
-                pass
-            else:
-                list_ = List(user=user, name=new_list)
-                print("what ........")
-                list_.save()
-
-            return JsonResponse({"new_list": new_list}, status=200)
-        except Exception as e:
-            print("crap2")
-            return JsonResponse({"error": str(e)}, status=404)
 
 
 # @login_required(login_url='/login/')
@@ -234,7 +212,7 @@ def add_new_list(request):
 
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def ListDetails(request, list_name):
     user = request.user
     lista = List.objects.get(user=user, name=list_name)
@@ -251,7 +229,7 @@ def ListDetails(request, list_name):
     return render(request, 'anime/list.html', context)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def edit_list(request, list_id):
     if request.is_ajax and request.method == "POST":
         user = request.user
@@ -268,7 +246,7 @@ def edit_list(request, list_id):
             return JsonResponse({"new_list": "new_list"}, status=404)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def delete_list(request):
     if request.is_ajax and request.method == "POST":
         user = request.user
@@ -283,7 +261,7 @@ def delete_list(request):
             return JsonResponse({"new_list": "new_list"}, status=404)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def Favlist(request):
     user = request.user
     fav_items = user.favorit_set.all()
@@ -299,7 +277,7 @@ def Favlist(request):
 
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def CommentView(request):
     if request.is_ajax and request.method == "POST":
         try:
@@ -347,7 +325,7 @@ def CommentView(request):
 #             return JsonResponse({"error": str(e)}, status=404)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def ReviewView(request):
     if request.is_ajax and request.method == "POST":
         try:

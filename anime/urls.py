@@ -19,14 +19,14 @@ urlpatterns = [
     path('remove_from_fav/', remove_from_fav, name='remove-from-fav'),
 
     path('edit_list/<int:list_id>/', edit_list, name='edit-list'),
-    # path('add_new_list/', add_new_list, name='add-new-list'),
+
     path('remove_from_list/', remove_from_list, name='remove-from-list'),
     path('delete_list/', delete_list, name='delete-list'),
     path('latest-chapters/', IndexView.as_view({'get': 'latest_chapter'}), name='latest-chapters'),
 
     path('manga/', include('manga.urls', namespace='manga')),
 
-    path('lists/', include('lists.urls')),
+    path('lists/', include('lists.urls', namespace='lists')),
     # path('<str:manga_name>/', manga, name='manga'),
     # path('<str:manga_name>/', include('chapter.urls', namespace="chapters")),
 

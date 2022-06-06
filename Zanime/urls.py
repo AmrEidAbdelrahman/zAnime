@@ -9,13 +9,10 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('login/', user_views.Login.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
-    path('register/', user_views.register, name='register'),
 
     path('notification/', user_views.NotificationView, name='notification'),
 
-    path('user/', include('user.urls', namespace='users')),
+    path('accounts/', include('user.urls', namespace='accounts')),
     path('', include('anime.urls', namespace='main')),
 ]
 
