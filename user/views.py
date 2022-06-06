@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib import messages
+from django.urls import reverse
+
 from user.forms import UserLoginForm, UserUpdateForm, ProfileUpdateForm, UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -11,11 +13,10 @@ from .models import Notification
 import json
 # Create your views here.
 
-class Login(LoginView):
-	template_name='user/login.html'
-	authentication_form=UserLoginForm
-	LOGIN_REDIRECT_URL = '/profiles/'
 
+class Login(LoginView):
+	template_name = 'user/login.html'
+	authentication_form = UserLoginForm
 
 
 
@@ -23,7 +24,6 @@ class Login(LoginView):
 def profile(request):
 	if request.method == "POST":
 		u_form = UserUpdateForm(request.POST, instance=request.user)
-		#print(request.FILES)
 		p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 		if u_form.is_valid() and p_form.is_valid():
 			u_form.save()
@@ -55,6 +55,7 @@ def register(request):
 	else:
 		form = UserRegisterForm()
 	return render(request, 'user/register.html', {'form':form})
+
 
 def NotificationView(request):
 	if request.method == "GET":

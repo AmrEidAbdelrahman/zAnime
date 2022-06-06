@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ModelViewSet
@@ -27,6 +28,8 @@ class MangaView(ModelViewSet):
         })
 
     def retrieve(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('accounts:login'))
         manga_pk = kwargs.get('pk')
         manga = get_object_or_404(Manga, pk=manga_pk)
         lists = set(manga.listitem_set.all().values_list('lista', flat=True))

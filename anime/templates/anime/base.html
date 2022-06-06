@@ -136,7 +136,7 @@
 
             {% if user.is_authenticated %}
                 <li class="nav-item {% if request.path == '/logout/' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'logout' %}"><i class="far fa-copy"></i>Logout</a>
+                    <a class="nav-link" href="{% url 'accounts:logout' %}"><i class="far fa-copy"></i>Logout</a>
                 </li>
             {% else %}
                 <li class="nav-item {% if request.path == '/logout/' %}active{% elif request.path == '/login/' %}active{% endif %}">

@@ -44,7 +44,7 @@
                 <div class="row">
                     <li class="list-group-item d-flex  hover" id="li-{{ li.id }}" data-name="{{ li.name }}">
                         <div class="d-block  fs-3 col-8">
-                            <a href="{% url 'main:list-details' li.name %}" class="mb-2">{{ li.name }}</a>
+                            <a href="{% url 'main:lists:list-details' li.name %}" class="mb-2">{{ li.name }}</a>
                         </div>
                         <div class="col-2">
                             <button class="btn btn-info d-inline col edit_list" id="{{ li.id }}">Edit</button>
