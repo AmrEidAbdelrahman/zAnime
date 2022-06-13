@@ -45,5 +45,12 @@ class MyListView(LoginRequiredMixin, ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         print("LIST CREATE TRIGGERED!")
-        return JsonResponse({'status': 'ok'})
+        list_name = request.data.get('list_name')
+        user = request.user
+        print(user)
+        list = List.objects.create(name=list_name, user=user)
+        print(list.__dict__)
+        return JsonResponse({
+            'status': 'ok'
+        })
 

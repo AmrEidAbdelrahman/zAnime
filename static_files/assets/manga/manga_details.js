@@ -1,6 +1,21 @@
 var rate = 20;
 
-
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 
 console.log("Manga_details.js");
 
@@ -88,17 +103,27 @@ $(document)
       // TODO: send ajax request to create the list
       // TODO: redisplay the list options with options updated
       // TODO: change the button to remove to recognize that the manga already inserted to the list
-      $form = $(this);
+      let $form = $(this);
+      let list_name = $form.find('input[name="list_name"]').val();
+      let data = {
+        'list_name': list_name
+      }
+      console.log(JSON.stringify(data));
       $.ajax({
         type: 'POST',
         url: '/lists/add_new_list/',
-        data: {
-          'X-CSRFToken': $('meta[name="csrf-token"]').attr('content'),
-          'list_name': $form.find('input[name="list_name"]').val(),
-        },
+        headers: {'X-CSRFToken': csrftoken},
+        data: JSON.stringify(data),
+        contentType:'application/json',
         success: function (response) {
           console.log("list created");
-          $form.siblings('form').removeClass('d-none');
+          console.log(response)
+          let $select_form = $form.siblings('form');
+          $select_form.removeClass('d-none');
+          let $select = $select_form.find('select');
+          $select.prepend(`
+            <option>${list_name}</option>
+          `)
           $form.remove();
           $select = $form.siblings('form').find('select[name="list_name"]');
           $select.append(`<option value="${response.id}">${response.list_name}</option>`);
