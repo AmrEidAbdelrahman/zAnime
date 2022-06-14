@@ -11,6 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from manga.models import Manga
 from .models import List, ListItem
+from .serializers import ListSerializer
 
 
 class MyListView(LoginRequiredMixin, ModelViewSet):
@@ -44,13 +45,17 @@ class MyListView(LoginRequiredMixin, ModelViewSet):
         return render(request, 'lists/list.html', context)
 
     def create(self, request, *args, **kwargs):
-        print("LIST CREATE TRIGGERED!")
+        print("LIST CREATE TRIGGERED!", request.data)
         list_name = request.data.get('list_name')
+        manga_id = request.data.get('manga_id')
+        manga = get_object_or_404(Manga, pk=manga_id)
         user = request.user
         print(user)
         list = List.objects.create(name=list_name, user=user)
-        print(list.__dict__)
+        list.listitem_set.create(manga=manga)
+        serialized_list = ListSerializer(list).data
         return JsonResponse({
-            'status': 'ok'
+            'status': 'ok',
+            'list': serialized_list,
         })
 

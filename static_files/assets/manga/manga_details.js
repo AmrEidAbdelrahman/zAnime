@@ -1,5 +1,5 @@
 var rate = 20;
-
+let lists = []
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -87,9 +87,10 @@ $(document)
           url: `toggle_to_list/${list_id}/`,
           success: function (response) {
             console.log("added to list");
-            $button = $select.closest('form').find('#add_list_button');
-            txt = $button.text()
-            txt === '+' ? $button.text('-') : $button.text('+')
+            let $button = $select.closest('form').find('#add_list_button');
+            console.log($button.text());
+            let txt = $button.text()
+            txt.trim() === '+' ? $button.text(' - ') : $button.text(' + ')
           },
           error: function (response) {
             alert(response["responseJSON"]["error"]);
@@ -104,8 +105,10 @@ $(document)
       // TODO: redisplay the list options with options updated
       // TODO: change the button to remove to recognize that the manga already inserted to the list
       let $form = $(this);
+      let manga_id = $form.data('manga');
       let list_name = $form.find('input[name="list_name"]').val();
       let data = {
+        'manga_id': 3,
         'list_name': list_name
       }
       console.log(JSON.stringify(data));
@@ -116,14 +119,16 @@ $(document)
         data: JSON.stringify(data),
         contentType:'application/json',
         success: function (response) {
-          console.log("list created");
-          console.log(response)
+          lists.push(response.list.id);
+          console.log(lists);
           let $select_form = $form.siblings('form');
           $select_form.removeClass('d-none');
           let $select = $select_form.find('select');
           $select.prepend(`
-            <option>${list_name}</option>
-          `)
+            <option id="${response.list.id}" value="${response.list.id}">${list_name}</option>
+          `);
+          $select.val(response.list.id);
+          $select_form.find(".btn").text(' - ');
           $form.remove();
           $select = $form.siblings('form').find('select[name="list_name"]');
           $select.append(`<option value="${response.id}">${response.list_name}</option>`);
@@ -151,13 +156,16 @@ $(document)
     })
     .on('change', 'select', function (e) {
       console.log("select changed");
-      $select = $(this);
-      $btn = $select.siblings('button');
-      lists = $select.data('lists').slice(1,-1).split(',');
+      let $select = $(this);
+      let $btn = $select.siblings('button');
+      lists = $select.data('lists').slice(1,-1).split(', ');
+      console.log(lists);
       if ($select.val() === "new list"){
         $btn.text(' + ');
       } else {
-        lists.includes($select.val()) ? $btn.text(' + ') : $btn.text(' - ');
+        console.log($select.val())
+        console.log(lists.includes($select.val()))
+        lists.includes($select.val()) ? $btn.text(' - ') : $btn.text(' + ');
       }
       // $select = $(this);
       // $select.toggleClass('d-none');
