@@ -42,7 +42,7 @@
         <ul class="list-group">
             {% for li in lists %}
                 <div class="row">
-                    <li class="list-group-item d-flex  hover" id="li-{{ li.id }}" data-name="{{ li.name }}">
+                    <li class="list-group-item d-flex  hover" data-id="{{ li.id }}" data-name="{{ li.name }}">
                         <div class="d-block  fs-3 col-8">
                             <a href="{% url 'main:lists:list-details' li.name %}" class="mb-2">{{ li.name }}</a>
                         </div>

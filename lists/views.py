@@ -59,3 +59,14 @@ class MyListView(LoginRequiredMixin, ModelViewSet):
             'list': serialized_list,
         })
 
+    def update(self, request, *args, **kwargs):
+        print("LIST UPDATE TRIGGERED!", request.data)
+        lista = get_object_or_404(List, pk=kwargs['id'])
+        lista.name = request.data.get('name')
+        print(lista)
+        lista.save()
+        return JsonResponse({
+            'status': 'ok',
+        })
+
+
