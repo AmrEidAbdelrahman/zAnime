@@ -11,6 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from lists.models import List, ListItem
 from manga.models import Manga
+from user.models import Favorit
 
 
 class MangaView(ModelViewSet):
@@ -39,6 +40,23 @@ class MangaView(ModelViewSet):
             'manga': manga,
             'lists': lists,
             'in_main_list': in_main_list,
+            'in_fav': Favorit.objects.filter(user=request.user, manga=manga).exists(),
+        })
+
+    def toggle_follow(self, request, *args, **kwargs):
+        print("toggle_follow")
+        if not request.user.is_authenticated:
+            return redirect(reverse('accounts:login'))
+        manga_pk = kwargs.get('pk')
+        manga = get_object_or_404(Manga, pk=manga_pk)
+        if Favorit.objects.filter(user=request.user, manga=manga).exists():
+            item = Favorit.objects.get(user=request.user, manga=manga)
+            item.delete()
+        else:
+            Favorit.objects.create(user=request.user, manga=manga)
+        return JsonResponse({
+            'status': 'OK',
+            'action': 'toggle_follow',
         })
 
 

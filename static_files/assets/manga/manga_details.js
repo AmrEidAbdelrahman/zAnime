@@ -148,11 +148,18 @@ $(document)
       $btn = $(this);
       $btn.toggleClass('btn-primary');
       $btn.toggleClass('btn-danger');
-      if ($btn.hasClass('btn-primary')){
-        $btn.text('Follow');
-      } else {
-        $btn.text('UnFollow');
-      }
+      $.ajax({
+        type: 'GET',
+        url: `toggle_follow/`,
+        success: function (response) {
+          console.log("followed");
+          if ($btn.hasClass('btn-primary')){
+            $btn.text('Follow');
+          } else {
+            $btn.text('UnFollow');
+          }
+        }
+      })
     })
     .on('change', 'select', function (e) {
       console.log("select changed");

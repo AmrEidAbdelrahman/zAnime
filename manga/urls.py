@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/', MangaView.as_view({'get': 'retrieve'}), name='details'),
     path('<int:manga_pk>/toggle_to_list/<int:list_pk>/', toggle_to_list, name='add-to-list'),
     path('<int:pk>/chapters/', include('chapter.urls', namespace='chapter')),
+    path('<int:pk>/toggle_follow/', MangaView.as_view({'get': 'toggle_follow'}), name='toggle_follow'),
 ]
