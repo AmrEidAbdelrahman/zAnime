@@ -3,7 +3,7 @@ let name_div = null;
 let new_name = null;
 
 const DOM = {
-  "cancel_changes": function ($element){
+  "cancel_changes": function ($element) {
     console.log('cancel-changes');
     $this = $element;
     $li = $this.closest('li');
@@ -23,20 +23,21 @@ const DOM = {
 }
 
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
     }
-    return cookieValue;
+  }
+  return cookieValue;
 }
+
 const csrftoken = getCookie('csrftoken');
 $(function () {
   $.ajaxSetup({
@@ -73,15 +74,22 @@ $(document)
       name = $li.data('name');
       console.log($li);
       $li.html(`
-        <div data-original="${name}">
-          <p>Confirm To Delete This List.</p>
-          <button class="btn btn-primary rounded confirm-edit">
-              <span class="matrial-icons">done</span>
-          </button>
-          <button class="btn btn-danger rounded cancel-change">
-              <span class="matrial-icons">close</span>
-          </button>
+        <div class="container">
+            <div data-original="${name}" class="d-flex ">
+              <p class="col-md-8">Confirm To Delete This List.</p>
+              <div class="col-2 ">              
+                <button class="btn btn-danger rounded cancel-change col">
+                    <span class="material-symbols-outlined align-middle">close</span>Cancel
+                </button>
+              </div>
+              <div class="col-2 ">
+                <button class="btn btn-primary col rounded confirm-delete">
+                    <span class="material-symbols-outlined align-middle ">done</span>Delete
+                </button>
+              </div>
+            </div>
         </div>
+        
       `)
     })
     .on('click', '.confirm-edit', function (e) {
@@ -111,4 +119,19 @@ $(document)
         }
       })
       DOM.cancel_changes($(this));
+    })
+    .on('click', '.confirm-delete', function (e) {
+      console.log('confirm-delete');
+      list_id = $(this).closest('li').data('id');
+      $.ajax({
+        method: 'DELETE',
+        url: `/lists/${list_id}/`,
+        headers: {
+          'X-CSRFToken': csrftoken,
+        },
+        success: function (data) {
+          console.log("SUCCESS DELETED", data);
+          $li.remove();
+        }
+      })
     })

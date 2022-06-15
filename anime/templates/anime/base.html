@@ -18,6 +18,7 @@
 
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
     <link rel="stylesheet" type="text/css" href="{% static 'anime/css/style.css' %}">
 
@@ -107,17 +108,13 @@
     </form>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="notification-icon" onclick="display_notification()">
-            <span id="notifiaction_number" class="fs-6 notification-number d-inline">1</span>
-            <span style="font-size: 1.3em; color:white;">
-				  	<i class="far fa-bell 7x"></i>
-				</span>
-        </div>
+        <button type="button" class="btn btn-primary position-relative ml-5">
+            <span class="material-symbols-outlined align-middle">notifications</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">+99
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
         <ul class="navbar-nav ml-auto">
-            <div class="hori-selector">
-                <div class="left"></div>
-                <div class="right"></div>
-            </div>
             <li class="nav-item {% if tab == 'manga' %}active{% endif %}">
                 <a class="nav-link " href="{% url 'main:manga:index' %}"><i class="fas fa-tachometer-alt"></i>Manga</a>
             </li>
