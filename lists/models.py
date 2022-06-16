@@ -13,7 +13,7 @@ class List(models.Model):
 
 
 class ListItem(models.Model):
-    lista = models.ForeignKey(List, on_delete=models.CASCADE)
+    lista = models.ForeignKey(List, on_delete=models.CASCADE, related_name='listitem_set')
     manga = models.ForeignKey(Manga, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

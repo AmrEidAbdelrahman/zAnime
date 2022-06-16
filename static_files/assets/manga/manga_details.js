@@ -108,7 +108,7 @@ $(document)
       let manga_id = $form.data('manga');
       let list_name = $form.find('input[name="list_name"]').val();
       let data = {
-        'manga_id': 3,
+        'manga_id': manga_id,
         'list_name': list_name
       }
       console.log(JSON.stringify(data));

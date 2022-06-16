@@ -52,7 +52,8 @@ class MyListView(LoginRequiredMixin, ModelViewSet):
         user = request.user
         print(user)
         list = List.objects.create(name=list_name, user=user)
-        list.listitem_set.create(manga=manga)
+        list_item = list.listitem_set.create(manga=manga)
+        print(list_item)
         serialized_list = ListSerializer(list).data
         return JsonResponse({
             'status': 'ok',
