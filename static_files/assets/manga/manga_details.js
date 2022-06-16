@@ -50,7 +50,8 @@ function displayRate() {
 const mangaDOM = {
   'renderListForm': function (element) {
     console.log("renderListForm");
-    element.addClass('d-none');
+    element.removeClass('d-flex');
+    element.addClass('d-none dd');
     $div = element.parent();
     $div.append(`
       <form id="create-new-list">
@@ -64,6 +65,7 @@ const mangaDOM = {
   "cancel_changes": function (element){
     console.log('cancel-changes');
     $form = element;
+    $form.siblings('form').addClass('d-flex');
     $form.siblings('form').removeClass('d-none');
     $form.remove();
   },
