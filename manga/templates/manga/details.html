@@ -31,34 +31,11 @@
     background-color:#EEE;
     }
 
-    #new_option_form {
-    width: 100%;
-    height: 100%;
-    z-index :1000;
-    margin-left: 20%;
-    }
 
-    #new_option,#new_option_input {
-    width: 50%;
-    margin-top: 0%;
-    margin-left: 14%;
-    z-index: 1001;
-    }
 
-    /* STAR RATE STYLE */
-    * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: arial;
-    }
 
-    .star-rating form {
-    display: none;
-    }
 
     .star-rating .thanks-msg {
-    display: none;
     font-size: 20px;
     margin: 40px auto;
     color: #4caf50;
@@ -68,76 +45,8 @@
     border-radius: 20px;
     }
 
-    .star-rating input {
-    display: none;
-    }
 
-    .star-rating {
-    margin: 50px 0% 0 0%;
-    display: table;
-    width: 100%;
-    float: left!important;
 
-    }
-    .star-rating label {
-    padding: 10px;
-    float: right;
-    font-size: 44px;
-    color: #eee;
-    }
-    .star-rating input:not(:checked) ~ label:hover,
-    .star-rating input:not(:checked) ~ label:hover ~ label {
-    color: #ffc107;
-    }
-    .star-rating input:checked ~ label {
-    color: #ffc107;
-    }
-    .star-rating form .rating-reaction:before {
-    width: 100%;
-    float: left;
-    color: #ffc107;
-    }
-    .star-rating #rating-1:checked ~ form .rating-reaction:before {
-    content: "I hate it";
-    }
-    .star-rating #rating-2:checked ~ form .rating-reaction:before {
-    content: "I don't like it";
-    }
-    .star-rating #rating-3:checked ~ form .rating-reaction:before {
-    content: "It is good";
-    }
-    .star-rating #rating-4:checked ~ form .rating-reaction:before {
-    content: "I like it";
-    }
-    .star-rating #rating-5:checked ~ form .rating-reaction:before {
-    content: "I love it";
-    }
-    .star-rating input:checked ~ form {
-    border-top: 1px solid #ddd;
-    width: 100%;
-    padding-top: 15px;
-    margin-top: 15px;
-    display: inline-block;
-    }
-    .star-rating form .rating-reaction {
-    font-size: 24px;
-    float: left;
-    text-transform: capitalize;
-    }
-    .star-rating form .submit-rating {
-    border: none;
-    outline: none;
-    background: #795548;
-    color: #ffc107;
-    font-size: 18px;
-    border-radius: 4px;
-    padding: 5px 15px;
-    cursor: pointer;
-    float: right;
-    }
-    form .submit-rating:hover {
-    background-color: #333;
-    }
 
 
 {% endblock style %}
@@ -222,49 +131,33 @@
             </ul>
         </div>
     </div>
-    <div class="reviews">
+    <div class="reviews mt-5">
         <div class="container">
             <h2>Reviews</h2>
             <div class="star-rating text-left mb-5">
-                <div class="thanks-msg text-left">Thanks for your feedback !!!</div>
-                <div class="star-input float-start">
-                    <input type="radio" name="rating" id="rating-5" onclick="setRate(5)">
-                    <label for="rating-5" class="fas fa-star"></label>
-                    <input type="radio" name="rating" id="rating-4" onclick="setRate(4)">
-                    <label for="rating-4" class="fas fa-star"></label>
-                    <input type="radio" name="rating" id="rating-3" onclick="setRate(3)">
-                    <label for="rating-3" class="fas fa-star"></label>
-                    <input type="radio" name="rating" id="rating-2" onclick="setRate(2)">
-                    <label for="rating-2" class="fas fa-star"></label>
-                    <input type="radio" name="rating" id="rating-1" onclick="setRate(1)">
-                    <label for="rating-1" class="fas fa-star"></label>
-
-                    <!-- Rating Submit Form -->
-                    <form method="POST" id="review">
-                        {% csrf_token %}
-                        <input type="hidden" name="manga_id" value="{{ manga.id }}">
-                        {{ form.content }}
-                        <span class="rating-reaction"></span>
-                        <button type="submit" class="submit-rating align-bottom">Submit</button>
+                <div class="mb-2">
+                    <form id="review" data-manga_id="{{ manga.id }}">
+                        <textarea class="form-control mb-2" id="review_text" rows="3" placeholder="Write your review"></textarea>
+                        <button type="submit" class="btn btn-primary align-bottom">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="container all_review">
-            {% for review in manga.review_set.all %}
-                <div class="card mb-3">
-                    <div class="card-header">
-                        {{ review.user.username }}
-                        {% if request.user == review.user %}
-                            <button class="btn btn-danger float-end">Delete</button>
-                        {% endif %}
-                    </div>
-                    <div class="card-body">
-                        <span>{{ review.user.username }} gives it {{ review.given_rate }} Star{{ review.given_rate|pluralize }}</span>
-                        <p class="card-text">{{ review.content }}</p>
+        <div id="all_reviews" class="container mt-5">
+            {% for review in manga.reviews.all %}
+                <div class="review-item" data-id="{{ review.id }}">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ review.user.username }}
+                            {% if request.user == review.user %}
+                                <button class="btn btn-danger float-end delete-review">Delete</button>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ review.content }}</p>
+                        </div>
                     </div>
                 </div>
-
             {% endfor %}
         </div>
     </div>
@@ -272,4 +165,6 @@
 
 {% block script %}
     <script type="text/javascript" src="{% static 'assets/manga/manga_details.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/reviews/reviews.js' %}"></script>
+
 {% endblock %}

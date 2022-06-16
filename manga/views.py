@@ -11,6 +11,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from lists.models import List, ListItem
 from manga.models import Manga
+from reviews.models import Review
+from reviews.serializers import ReviewSerializer
 from user.models import Favorit
 
 
@@ -58,6 +60,20 @@ class MangaView(ModelViewSet):
             'status': 'OK',
             'action': 'toggle_follow',
         })
+
+    def review(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse('accounts:login'))
+        manga_pk = kwargs.get('pk')
+        manga = get_object_or_404(Manga, pk=manga_pk)
+        review = request.data.get('review')
+        review = manga.reviews.create(user=request.user, rate=1, content=review)
+        serializer = ReviewSerializer(review)
+        return JsonResponse({
+            'status': 'OK',
+            'review': serializer.data,
+        })
+
 
 
 @csrf_exempt

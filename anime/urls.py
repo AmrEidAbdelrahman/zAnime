@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('comment/', CommentView, name='comment'),
     # path('reply/', ReplyView, name='reply'),
-    path('review/', ReviewView, name='submit-review'),
+    path('review/', include('reviews.urls', namespace='review')),
 
     path('add_to_fav/', add_to_fav, name='add-to-fav'),
     path('remove_from_fav/', remove_from_fav, name='remove-from-fav'),

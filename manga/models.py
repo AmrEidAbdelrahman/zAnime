@@ -4,6 +4,8 @@ from django.db import models
 
 
 # Create your models here.
+from reviews.models import Review
+
 
 class Manga(models.Model):
     # ---- TBC ---- #
@@ -19,7 +21,7 @@ class Manga(models.Model):
     TYPE_MANHWA = "Manhwa"
     TYPE_MANGA = "Manga"
     TYPE_COMICS = "Comics"
-    TYPE_MANHWA = "Manhua"
+    TYPE_MANHUA = "Manhua"
     TYPE_NOVEL = "Novel"
     TYPE = (
         (TYPE_MANHWA, 'manhwa'),
@@ -36,7 +38,7 @@ class Manga(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    publication_date = models.DateField()
+    publication_date = models.DateField(null=True, blank=True)
     publication_type = models.CharField(max_length=10, choices=PUBLICATION_TYPE, default='seasonal')
     number_of_chapters = models.IntegerField(default=0)
 
@@ -44,6 +46,8 @@ class Manga(models.Model):
     rate = models.FloatField(default=3)
 
     genres = GenericRelation('ModelGenre')
+
+    reviews = GenericRelation(Review, related_name='manga')
 
     def __str__(self):
         return self.title

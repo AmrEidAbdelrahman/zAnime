@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
