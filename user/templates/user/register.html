@@ -4,12 +4,12 @@
 		{% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Join Today</legend>
-            {{ form }}
+            {{ form.as_p }}
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Sign Up</button>
         </div>
 	</form>
 
-	<a href="{% url 'login' %}">login instead</a>
+	<a href="{% url 'accounts:login' %}">login instead</a>
 {% endblock content %}
