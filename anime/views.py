@@ -13,7 +13,7 @@ from comments.models import Comment
 from manga.models import Manga
 from reviews.forms import ReviewForm
 from reviews.models import Review
-from user.models import Favorit
+from profiles.models import Favorit
 from lists.models import List, ListItem
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required

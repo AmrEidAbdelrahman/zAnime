@@ -13,7 +13,7 @@ from lists.models import List, ListItem
 from manga.models import Manga
 from reviews.models import Review
 from reviews.serializers import ReviewSerializer
-from user.models import Favorit
+from profiles.models import Favorit
 
 
 class MangaView(ModelViewSet):

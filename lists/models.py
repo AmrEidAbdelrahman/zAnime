@@ -1,7 +1,8 @@
-from django.contrib.auth.models import User
+
 from django.db import models
 
 from manga.models import Manga
+from user.models import User
 
 
 class List(models.Model):

@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 
 from chapter.models import Chapter
 from lists.models import List
-from .models import Profile, Notification
+from profiles.models import Profile
+from .models import Notification
+
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
