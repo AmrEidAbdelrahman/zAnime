@@ -31,7 +31,7 @@ def profile(request):
 			p_form.save()
 			print(request.user.profile.pic.url)
 			messages.success(request, f'You Profile save')
-			return redirect('profile')
+			return redirect(reverse('accounts:profile'))
 	else:
 		u_form = UserUpdateForm(instance=request.user)
 		p_form = ProfileUpdateForm(instance=request.user.profile)
